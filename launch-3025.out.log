@@ -1,0 +1,81 @@
+
+> robokorda-invitation@1.0.0 dev
+> next dev -p 3025
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3025
+   - Network:      http://100.123.227.43:3025
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 7.4s
+ ○ Compiling / ...
+ ✓ Compiled / in 4.8s (614 modules)
+ GET / 200 in 7220ms
+ ○ Compiling /invite/[token] ...
+ ✓ Compiled /invite/[token] in 8.3s (663 modules)
+ GET /invite/sample-dambu-token 200 in 14726ms
+ GET / 200 in 1435ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 702ms (405 modules)
+ GET /favicon.ico 200 in 1413ms
+ ○ Compiling /invite/[token] ...
+ ✓ Compiled /invite/[token] in 1166ms (424 modules)
+ GET /invite/sample-dambu-token 200 in 4571ms
+ GET /invite/sample-dambu-token 200 in 201ms
+ ○ Compiling /api/invite/[token] ...
+ ✓ Compiled /api/invite/[token] in 2.1s (685 modules)
+ GET /invite/sample-dambu-token 200 in 5926ms
+prisma:error 
+Invalid `prisma.guest.findUnique()` invocation:
+
+
+Authentication failed against database server, the provided database credentials for `root` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
+ GET /api/invite/sample-dambu-token 200 in 8223ms
+prisma:error 
+Invalid `prisma.guest.findUnique()` invocation:
+
+
+Authentication failed against database server, the provided database credentials for `root` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
+ GET /api/invite/sample-dambu-token 200 in 2683ms
+ ✓ Compiled in 2.2s (257 modules)
+ GET /invite/sample-dambu-token 200 in 3064ms
+ ✓ Compiled in 4s (680 modules)
+ GET /invite/sample-dambu-token 200 in 4291ms
+ ✓ Compiled in 3.8s (604 modules)
+ GET /invite/sample-dambu-token 200 in 7324ms
+ GET /invite/sample-dambu-token 200 in 129ms
+ ✓ Compiled in 2.8s (604 modules)
+ GET /invite/sample-dambu-token 200 in 5224ms
+ GET /invite/sample-dambu-token 200 in 108ms
+ ✓ Compiled in 3.9s (604 modules)
+ GET /invite/sample-dambu-token 200 in 3541ms
+ ✓ Compiled in 1900ms (604 modules)
+ GET /invite/sample-dambu-token 200 in 3670ms
+ ✓ Compiled in 1483ms (604 modules)
+ GET /invite/sample-dambu-token 200 in 3735ms
+ ✓ Compiled in 2.2s (604 modules)
+ GET /invite/sample-dambu-token 200 in 3311ms
+ ✓ Compiled in 1830ms (604 modules)
+ GET /invite/sample-dambu-token 200 in 3929ms
+ GET /invite/sample-dambu-token 200 in 7781ms
+ ○ Compiling /api/invite/[token] ...
+ ✓ Compiled /api/invite/[token] in 1586ms (370 modules)
+ ✓ Compiled (376 modules)
+ GET /favicon.ico 200 in 6860ms
+prisma:error 
+Invalid `prisma.guest.findUnique()` invocation:
+
+
+Authentication failed against database server, the provided database credentials for `root` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
+ GET /api/invite/sample-dambu-token 200 in 6371ms
+ ✓ Compiled in 1063ms (251 modules)
+ GET /invite/sample-dambu-token 200 in 2821ms
+ ✓ Compiled in 1796ms (604 modules)
+ GET /invite/sample-dambu-token 200 in 2872ms

@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  PREFER_NOT_TO_SAY
+}
+
+enum RSVPStatus {
+  PENDING
+  ACCEPT
+  DECLINE
+  MAYBE
+}
+
+enum GalleryImageType {
+  HERO
+  GALLERY
+}
+
+enum MealCourse {
+  STARTER
+  MAIN
+  DESSERT
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  checkIns CheckIn[]
+}
+
+model Guest {
+  id                Int        @id @default(autoincrement())
+  fullName          String
+  gender            Gender?
+  email             String?    @unique
+  phone             String?    @unique
+  inviteToken       String     @unique
+  rsvpCode          String     @unique
+  rsvpStatus        RSVPStatus @default(PENDING)
+  selectedStarterId Int?
+  selectedMainId    Int?
+  selectedDessertId Int?
+  selectedTableId   Int?
+  isCheckedIn       Boolean    @default(false)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  selectedStarter Meal?       @relation("SelectedStarter", fields: [selectedStarterId], references: [id])
+  selectedMain    Meal?       @relation("SelectedMain", fields: [selectedMainId], references: [id])
+  selectedDessert Meal?       @relation("SelectedDessert", fields: [selectedDessertId], references: [id])
+  selectedTable   EventTable? @relation("SelectedTable", fields: [selectedTableId], references: [id])
+  rsvp            RSVP?
+  checkIn         CheckIn?
+
+  @@index([fullName])
+  @@index([rsvpStatus])
+}
+
+model Meal {
+  id                Int        @id @default(autoincrement())
+  name              String
+  description       String?    @db.Text
+  course            MealCourse @default(MAIN)
+  category          String?
+  imageUrl          String?
+  availableQuantity Int
+  reservedQuantity  Int        @default(0)
+  isActive          Boolean    @default(true)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  starterGuests  Guest[] @relation("SelectedStarter")
+  mainGuests     Guest[] @relation("SelectedMain")
+  dessertGuests  Guest[] @relation("SelectedDessert")
+  starterRsvps   RSVP[]  @relation("StarterMeal")
+  mainRsvps      RSVP[]  @relation("MainMeal")
+  dessertRsvps   RSVP[]  @relation("DessertMeal")
+}
+
+model EventTable {
+  id            Int      @id @default(autoincrement())
+  tableName     String   @unique
+  capacity      Int
+  reservedSeats Int      @default(0)
+  locationNote  String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  guests Guest[] @relation("SelectedTable")
+  rsvps  RSVP[]
+}
+
+model RSVP {
+  id          Int        @id @default(autoincrement())
+  guestId     Int        @unique
+  status      RSVPStatus
+  gender      Gender
+  starterId   Int?
+  mainId      Int?
+  dessertId   Int?
+  tableId     Int?
+  notes       String?    @db.Text
+  submittedAt DateTime   @default(now())
+
+  guest   Guest       @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  starter Meal?       @relation("StarterMeal", fields: [starterId], references: [id])
+  main    Meal?       @relation("MainMeal", fields: [mainId], references: [id])
+  dessert Meal?       @relation("DessertMeal", fields: [dessertId], references: [id])
+  table   EventTable? @relation(fields: [tableId], references: [id])
+}
+
+model GalleryImage {
+  id        Int              @id @default(autoincrement())
+  title     String
+  imageUrl  String           @unique
+  type      GalleryImageType @default(GALLERY)
+  isHero    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+model CheckIn {
+  id          Int      @id @default(autoincrement())
+  guestId     Int      @unique
+  checkedInAt DateTime @default(now())
+  checkedInBy Int
+
+  guest Guest     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  admin AdminUser @relation(fields: [checkedInBy], references: [id])
+}
+
+model EventSetting {
+  id               Int      @id @default(autoincrement())
+  eventName        String
+  eventDate        DateTime
+  eventTime        String
+  venueName        String
+  venueAddress     String
+  dressCode        String?
+  theme            String?
+  heroImageUrl     String?
+  lightModeLogoUrl String?
+  darkModeLogoUrl  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

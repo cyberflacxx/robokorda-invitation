@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg-main: #0b1f3a;
+  --bg-soft: #102a43;
+  --text-main: #ffffff;
+  --text-muted: #bcccdc;
+  --line-soft: rgba(188, 204, 220, 0.34);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(188, 204, 220, 0.18), transparent 35%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.12), transparent 28%),
+    linear-gradient(150deg, var(--bg-main), var(--bg-soft) 60%, #243b53);
+  color: var(--text-main);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display), "Georgia", serif;
+  letter-spacing: 0.01em;
+}
+
+p {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(188, 204, 220, 0.35);
+  color: #102a43;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-brand-gold/30 bg-brand-black/50 px-3 py-2.5 text-brand-paper outline-none transition placeholder:text-brand-gold/55 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/30;
+  }
+
+  .card {
+    @apply rounded-2xl border border-brand-gold/20 bg-brand-navy/70 p-5 text-brand-paper shadow-soft backdrop-blur-sm;
+  }
+
+  .surface {
+    @apply rounded-3xl border border-brand-gold/20 bg-brand-navy/70 shadow-soft backdrop-blur-sm;
+  }
+
+  .surface-soft {
+    @apply rounded-2xl border border-brand-gold/15 bg-brand-black/45 backdrop-blur-sm;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-brand-gold px-6 py-3 font-semibold text-brand-ink transition hover:brightness-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-brand-gold/45 bg-transparent px-6 py-3 font-semibold text-brand-paper transition hover:bg-brand-gold/10;
+  }
+
+  .section-shell {
+    @apply mx-auto max-w-6xl px-4 sm:px-6;
+  }
+
+  .meal-fill-bar {
+    width: var(--meal-fill, 0%);
+  }
+}
+
+.navbar-action-btn {
+  border: 1px solid #0b1f3a !important;
+  color: #0b1f3a !important;
+  background-color: #ffffff !important;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.navbar-action-btn:hover,
+.navbar-action-btn:focus-visible {
+  background-color: #0b1f3a !important;
+  color: #ffffff !important;
+  border-color: #0b1f3a !important;
+}
+
+.rk-surface {
+  border: 1px solid rgba(11, 31, 58, 0.16);
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(11, 31, 58, 0.1);
+}
+
+.rk-glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(11, 31, 58, 0.2);
+}
+
+.rk-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #0b1f3a;
+  color: #0b1f3a;
+  background: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.rk-social-link svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.rk-social-link:hover,
+.rk-social-link:focus-visible {
+  background: #0b1f3a;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.rk-nav-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.rk-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+.rk-nav-link:hover::after,
+.rk-nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.rk-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+@media (max-width: 767.98px) {
+  .rk-top-btn {
+    font-size: 0.82rem !important;
+    padding: 0.26rem 0.5rem !important;
+    line-height: 1.2;
+  }
+
+  .rk-footer-bar {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .rk-footer-copy {
+    max-width: 26ch;
+    margin-inline: auto;
+  }
+}
+

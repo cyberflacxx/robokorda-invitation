@@ -1,0 +1,324 @@
+
+> robokorda-invitation@1.0.0 dev
+> next dev -p 3031
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3031
+   - Network:      http://100.123.227.43:3031
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 3.3s
+ ○ Compiling / ...
+ ✓ Compiled / in 1554ms (637 modules)
+ GET / 200 in 2642ms
+ ✓ Compiled /middleware in 398ms (195 modules)
+ ○ Compiling /api/admin/guests ...
+ ✓ Compiled /api/admin/guests in 1961ms (819 modules)
+ GET /api/admin/guests? 200 in 2685ms
+ ✓ Compiled /api/auth/login in 317ms (823 modules)
+ POST /api/auth/login 200 in 877ms
+ GET /api/admin/guests 200 in 95ms
+ GET /api/admin/guests? 200 in 64ms
+ GET /api/admin/guests? 200 in 53ms
+ GET /api/admin/guests? 200 in 41ms
+ GET /api/admin/guests? 200 in 44ms
+ ○ Compiling /api/admin/guests/[id]/send-email ...
+ ✓ Compiled /api/admin/guests/[id]/send-email in 3s (839 modules)
+ POST /api/admin/guests/1/send-email 200 in 8263ms
+ GET /api/admin/guests? 200 in 54ms
+ GET /api/admin/guests? 200 in 42ms
+ GET /api/admin/guests? 200 in 50ms
+ GET /api/admin/guests? 200 in 40ms
+ GET /api/admin/guests? 200 in 42ms
+ GET /api/admin/guests? 200 in 36ms
+ GET /api/admin/guests? 200 in 31ms
+ GET /api/admin/guests? 200 in 51ms
+ GET /api/admin/guests? 200 in 44ms
+ GET /api/admin/guests? 200 in 43ms
+ GET /api/admin/guests? 200 in 40ms
+ GET /api/admin/guests? 200 in 48ms
+ GET /api/admin/guests? 200 in 50ms
+ GET /api/admin/guests? 200 in 29ms
+ GET /api/admin/guests? 200 in 32ms
+ GET /api/admin/guests? 200 in 32ms
+ GET /api/admin/guests? 200 in 86ms
+ GET /api/admin/guests? 200 in 42ms
+ ✓ Compiled in 788ms (515 modules)
+ ✓ Compiled in 550ms (515 modules)
+ ✓ Compiled in 333ms (248 modules)
+ GET /api/admin/guests? 200 in 253ms
+ ✓ Compiled /api/auth/login in 94ms (272 modules)
+ POST /api/auth/login 200 in 663ms
+ POST /api/admin/guests 200 in 77ms
+ GET /api/admin/guests? 200 in 63ms
+ ○ Compiling /admin/guests ...
+ ✓ Compiled /admin/guests in 2.4s (852 modules)
+ GET /admin/guests 200 in 3999ms
+ ✓ Compiled /favicon.ico in 382ms (598 modules)
+ GET /favicon.ico 200 in 863ms
+ GET /api/admin/guests? 200 in 802ms
+ GET /api/admin/guests? 200 in 41ms
+ ○ Compiling /api/admin/guests/[id] ...
+ ✓ Compiled /api/admin/guests/[id] in 682ms (856 modules)
+ DELETE /api/admin/guests/2 200 in 2794ms
+ GET /api/admin/guests? 200 in 114ms
+ GET /api/admin/guests? 200 in 40ms
+ DELETE /api/admin/guests/1 200 in 1311ms
+ GET /api/admin/guests? 200 in 49ms
+ GET /api/admin/guests? 200 in 40ms
+ ○ Compiling /admin/tables ...
+ ✓ Compiled /admin/tables in 898ms (859 modules)
+ GET /admin/tables 200 in 1150ms
+ ○ Compiling /api/admin/tables ...
+ ✓ Compiled /api/admin/tables in 806ms (861 modules)
+ GET /api/admin/tables 200 in 1107ms
+ GET /api/admin/tables 200 in 1114ms
+ GET /admin/tables 200 in 878ms
+ GET /api/admin/tables 200 in 36ms
+ GET /api/admin/tables 200 in 40ms
+ GET /api/admin/tables 200 in 28ms
+ GET /api/admin/tables 200 in 44ms
+ GET /api/admin/tables 200 in 48ms
+ GET /api/admin/tables 200 in 38ms
+ GET /api/admin/tables 200 in 41ms
+ GET /api/admin/tables 200 in 39ms
+ GET /api/admin/tables 200 in 59ms
+ ○ Compiling /admin/gallery ...
+ ✓ Compiled /admin/gallery in 1253ms (810 modules)
+ GET /admin/gallery 200 in 1657ms
+ ○ Compiling /api/admin/gallery ...
+ ✓ Compiled /api/admin/gallery in 746ms (812 modules)
+ GET /api/admin/gallery 200 in 994ms
+ GET /api/admin/gallery 200 in 50ms
+ ○ Compiling /admin/meals ...
+ ✓ Compiled /admin/meals in 1033ms (819 modules)
+ GET /admin/meals 200 in 1401ms
+ GET /api/admin/gallery 200 in 155ms
+ ○ Compiling /api/admin/meals ...
+ ✓ Compiled /api/admin/meals in 590ms (821 modules)
+ GET /api/admin/meals 200 in 707ms
+ GET /api/admin/meals 200 in 42ms
+ GET /api/admin/meals 200 in 68ms
+ GET /api/admin/meals 200 in 36ms
+ GET /api/admin/meals 200 in 48ms
+ GET /api/admin/meals 200 in 46ms
+ GET /api/admin/meals 200 in 25ms
+ GET /api/admin/meals 200 in 36ms
+ GET /api/admin/meals 200 in 51ms
+ GET /api/admin/meals 200 in 48ms
+ GET /api/admin/meals 200 in 47ms
+ GET /api/admin/meals 200 in 37ms
+ GET /api/admin/meals 200 in 40ms
+ GET /api/admin/meals 200 in 41ms
+ GET /api/admin/meals 200 in 45ms
+ GET /api/admin/meals 200 in 53ms
+ GET /api/admin/meals 200 in 58ms
+ GET /api/admin/meals 200 in 37ms
+ GET /api/admin/meals 200 in 48ms
+ GET /api/admin/meals 200 in 34ms
+ GET /admin/guests 200 in 397ms
+ ○ Compiling /api/admin/guests ...
+ ✓ Compiled /api/admin/guests in 1345ms (609 modules)
+ GET /api/admin/guests? 200 in 1716ms
+ GET /api/admin/guests? 200 in 1724ms
+ GET /api/admin/guests? 200 in 33ms
+ GET /api/admin/guests? 200 in 25ms
+ GET /api/admin/guests? 200 in 53ms
+ GET /api/admin/guests? 200 in 35ms
+ GET /api/admin/guests? 200 in 33ms
+ GET /api/admin/guests? 200 in 31ms
+ GET /api/admin/guests? 200 in 59ms
+ GET /api/admin/guests? 200 in 53ms
+ ○ Compiling /invite/[token] ...
+ ✓ Compiled /invite/[token] in 1088ms (877 modules)
+ GET /invite/sample-dambu-token 200 in 3360ms
+ ⚠ Cross origin request detected from 192.168.1.74 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ✓ Compiled /api/invite/[token] in 285ms (615 modules)
+ ✓ Compiled in 228ms (264 modules)
+ GET /favicon.ico 200 in 1426ms
+ GET /api/invite/sample-dambu-token 200 in 2117ms
+ GET /api/admin/guests? 200 in 176ms
+ ○ Compiling / ...
+ ✓ Compiled / in 833ms (631 modules)
+ GET / 200 in 1522ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 1122ms (949 modules)
+ GET /admin/login 200 in 1421ms
+ GET /admin/guests 200 in 69ms
+ GET /admin/login 200 in 67ms
+ GET /api/admin/guests? 200 in 140ms
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 585ms (647 modules)
+ POST /api/auth/login 200 in 1160ms
+ ○ Compiling /admin/dashboard ...
+ ✓ Compiled /admin/dashboard in 1169ms (944 modules)
+ GET /admin/dashboard 200 in 1546ms
+ GET /api/admin/guests? 200 in 152ms
+ ○ Compiling /api/admin/dashboard-stats ...
+ ✓ Compiled /api/admin/dashboard-stats in 992ms (946 modules)
+ GET /api/admin/dashboard-stats 200 in 1197ms
+ GET /api/admin/dashboard-stats 200 in 1203ms
+ GET /api/admin/dashboard-stats 200 in 31ms
+ GET /admin/guests 200 in 100ms
+ GET /api/admin/dashboard-stats 200 in 43ms
+ GET /api/admin/guests? 200 in 83ms
+ GET /api/admin/guests? 200 in 38ms
+ GET /api/admin/guests? 200 in 28ms
+ GET /admin/meals 200 in 66ms
+ ○ Compiling /api/admin/meals ...
+ ✓ Compiled /api/admin/meals in 795ms (660 modules)
+ GET /api/admin/meals 200 in 945ms
+ GET /api/admin/meals 200 in 72ms
+ ○ Compiling /admin/tables ...
+ ✓ Compiled /admin/tables in 1715ms (665 modules)
+ GET /admin/tables 200 in 2093ms
+ ○ Compiling /api/admin/tables ...
+ ✓ Compiled /api/admin/tables in 907ms (667 modules)
+ GET /api/admin/tables 200 in 945ms
+ GET /api/admin/tables 200 in 1140ms
+ GET /api/admin/tables 200 in 26ms
+ GET /api/admin/guests? 200 in 122ms
+ GET /api/admin/tables 200 in 41ms
+ GET /api/admin/tables 200 in 49ms
+ GET /api/admin/tables 200 in 50ms
+ GET /api/admin/tables 200 in 56ms
+ GET /api/admin/guests? 200 in 62ms
+ GET /api/admin/tables 200 in 31ms
+ GET /api/admin/tables 200 in 27ms
+ ○ Compiling /admin/gallery ...
+ ✓ Compiled /admin/gallery in 579ms (640 modules)
+ GET /admin/gallery 200 in 840ms
+ ○ Compiling /api/admin/gallery ...
+ ✓ Compiled /api/admin/gallery in 547ms (642 modules)
+ GET /api/admin/gallery 200 in 740ms
+ GET /api/admin/gallery 200 in 36ms
+ ○ Compiling /admin/checkin ...
+ ✓ Compiled /admin/checkin in 1404ms (1025 modules)
+ GET /api/admin/gallery 200 in 815ms
+ GET /admin/checkin 200 in 1609ms
+ GET /api/admin/guests 200 in 90ms
+ GET /api/admin/guests 200 in 25ms
+ ✓ Compiled /admin/settings in 505ms (1032 modules)
+ GET /admin/settings 200 in 611ms
+ ○ Compiling /api/admin/settings ...
+ ✓ Compiled /api/admin/settings in 593ms (1034 modules)
+ GET /api/admin/settings 200 in 707ms
+ GET /api/admin/settings 200 in 36ms
+ GET /api/admin/guests? 200 in 110ms
+ GET /api/admin/guests? 200 in 49ms
+ GET /api/admin/guests? 200 in 117ms
+ GET /api/admin/guests? 200 in 121ms
+ GET /api/admin/guests? 200 in 68ms
+ GET /api/admin/guests? 200 in 63ms
+ ✓ Compiled in 1763ms (967 modules)
+ GET /api/admin/guests? 200 in 257ms
+ GET /admin/guests 200 in 205ms
+ ✓ Compiled in 339ms (334 modules)
+ GET /admin/guests 200 in 57ms
+ GET /api/admin/guests? 200 in 23ms
+ ✓ Compiled in 619ms (334 modules)
+ GET /admin/guests 200 in 60ms
+ GET /api/admin/guests? 200 in 39ms
+ ✓ Compiled in 1610ms (967 modules)
+ GET /admin/guests 200 in 222ms
+ GET /api/admin/guests? 200 in 120ms
+ ✓ Compiled in 1297ms (967 modules)
+ GET /admin/guests 200 in 196ms
+ GET /api/admin/guests? 200 in 188ms
+ ✓ Compiled in 779ms (967 modules)
+ GET /admin/guests 200 in 141ms
+ GET /api/admin/guests? 200 in 84ms
+ ○ Compiling / ...
+ ✓ Compiled / in 648ms (651 modules)
+ GET / 200 in 1331ms
+ GET /admin/guests 200 in 75ms
+ GET /api/admin/guests? 200 in 119ms
+ ○ Compiling /invite/[token] ...
+ ✓ Compiled /invite/[token] in 959ms (657 modules)
+ GET /invite/sample-dambu-token 200 in 2264ms
+ GET /admin/guests 200 in 89ms
+ GET /admin/login 200 in 190ms
+ GET /api/admin/guests? 200 in 164ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 657ms (662 modules)
+ GET /admin/settings 200 in 1009ms
+ GET /admin/guests 200 in 63ms
+ GET /api/admin/guests? 200 in 79ms
+ ✓ Compiled /api/admin/settings in 318ms (664 modules)
+ GET /api/admin/settings 200 in 403ms
+ GET /admin/dashboard 200 in 89ms
+ ✓ Compiled /api/admin/dashboard-stats in 292ms (648 modules)
+ GET /api/admin/dashboard-stats 200 in 495ms
+ GET /api/admin/dashboard-stats 200 in 498ms
+ GET /admin/guests 200 in 153ms
+ GET /api/admin/guests? 200 in 70ms
+ GET /api/admin/guests? 200 in 88ms
+ ✓ Compiled /api/admin/guests/[id] in 251ms (622 modules)
+ DELETE /api/admin/guests/3 200 in 1120ms
+ GET /api/admin/guests? 200 in 50ms
+ GET /api/admin/guests? 200 in 50ms
+ GET /admin/meals 200 in 112ms
+ ○ Compiling /api/admin/meals ...
+ ✓ Compiled /api/admin/meals in 525ms (624 modules)
+ GET /api/admin/meals 200 in 719ms
+ GET /api/admin/meals 200 in 67ms
+ GET /api/admin/meals 200 in 37ms
+ GET /admin/tables 200 in 126ms
+ ✓ Compiled /api/admin/tables in 291ms (626 modules)
+ GET /api/admin/tables 200 in 384ms
+ GET /api/admin/tables 200 in 373ms
+ GET /api/admin/tables 200 in 50ms
+ GET /api/admin/tables 200 in 47ms
+ GET /api/admin/guests? 200 in 134ms
+ GET /api/admin/guests? 200 in 55ms
+ GET /admin/tables 200 in 413ms
+ GET /api/admin/tables 200 in 29ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 897ms (940 modules)
+ POST /api/auth/logout 200 in 1095ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 1731ms (642 modules)
+ POST /api/auth/logout 200 in 1997ms
+ POST /api/auth/logout 200 in 310ms
+ GET /admin/login 200 in 2431ms
+ GET /admin/login 200 in 47ms
+ GET /admin/login 200 in 48ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.8s (994 modules)
+ GET / 200 in 3349ms
+ GET /admin/guests 200 in 93ms
+ GET / 200 in 90ms
+ GET /api/admin/guests? 200 in 115ms
+ GET /admin/login 200 in 314ms
+ GET /api/admin/guests? 200 in 49ms
+ GET /api/admin/guests? 200 in 71ms
+ ✓ Compiled in 1416ms (959 modules)
+ GET /admin/guests 200 in 472ms
+ GET /api/admin/guests? 200 in 156ms
+ GET / 200 in 422ms
+ GET /api/admin/guests? 200 in 50ms
+ GET / 200 in 152ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 580ms (627 modules)
+ GET /favicon.ico 200 in 678ms
+ GET /api/admin/guests? 200 in 162ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 624ms (649 modules)
+ GET /admin/login 200 in 918ms
+ GET / 200 in 202ms
+ GET /api/admin/guests? 200 in 150ms
+ GET /api/admin/guests? 200 in 48ms
+ GET /api/admin/guests? 200 in 54ms
+ GET /api/admin/guests? 200 in 73ms
+ GET /api/admin/guests? 200 in 53ms
+ GET /api/admin/guests? 200 in 63ms
+ GET /api/admin/guests? 200 in 66ms
+ GET /api/admin/guests? 200 in 100ms
+ GET /api/admin/guests? 200 in 52ms
+   Reload env: .env
+ ✓ Compiled in 1492ms (1171 modules)
+ GET /admin/guests 200 in 253ms
+ GET /api/admin/guests? 200 in 181ms
+ GET /api/admin/guests? 200 in 60ms

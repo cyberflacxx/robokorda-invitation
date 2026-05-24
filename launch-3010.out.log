@@ -1,0 +1,17 @@
+
+> robokorda-invitation@1.0.0 dev
+> next dev -p 3010
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3010
+   - Network:      http://100.123.227.43:3010
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 8.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 6.2s (614 modules)
+ GET / 200 in 8926ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 752ms (405 modules)
+ GET /favicon.ico 200 in 1341ms
