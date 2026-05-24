@@ -28,7 +28,7 @@ function buildTransporter() {
 }
 
 function htmlTemplate(params: InvitationEmailParams): string {
-  const { guestName, eventName, rsvpCode, inviteLink, eventDate, venueName, venueAddress } = params;
+  const { guestName, eventName, rsvpCode, inviteLink, eventDate } = params;
   const firstName = guestName.split(" ")[0];
   const dateDisplay = eventDate
     ? new Date(eventDate).toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
@@ -75,7 +75,7 @@ function htmlTemplate(params: InvitationEmailParams): string {
               </table>
 
               <p style="margin:0 0 24px;color:#4a5568;font-size:15px;line-height:1.7;">
-                Use this code when you open your invitation to confirm your attendance, choose your preferred meal for each course (starter, main, and dessert), and select your seating table.
+                Use this code when you open your invitation to confirm your attendance and choose your preferred meal for each course (starter, main, and dessert).
               </p>
 
               <!-- CTA Button -->
@@ -100,8 +100,7 @@ function htmlTemplate(params: InvitationEmailParams): string {
           <tr>
             <td style="background:#0B1F3A;padding:24px 40px;text-align:center;">
               <p style="margin:0 0 4px;color:#D4AF37;font-size:14px;font-weight:600;">${eventName}</p>
-              ${venueName ? `<p style="margin:0 0 2px;color:#bcccdc;font-size:13px;">${venueName}</p>` : ""}
-              ${venueAddress ? `<p style="margin:0;color:#8a9bbf;font-size:12px;">${venueAddress}</p>` : ""}
+              <p style="margin:0;color:#bcccdc;font-size:13px;">Venue: To be advised</p>
             </td>
           </tr>
 

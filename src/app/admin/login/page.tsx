@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@robokorda.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -68,13 +68,23 @@ export default function AdminLoginPage() {
           className="w-100 rounded-3xl border border-brand-gold/30 bg-brand-black/70 p-8 text-brand-paper shadow-glow backdrop-blur"
           style={{ maxWidth: "420px" }}
         >
+          <input type="text" name="fake-username" autoComplete="username" className="d-none" tabIndex={-1} aria-hidden="true" />
+          <input type="password" name="fake-password" autoComplete="current-password" className="d-none" tabIndex={-1} aria-hidden="true" />
           <p className="mb-2 text-xs uppercase tracking-[0.25em] text-brand-gold">Control Center</p>
           <h1 className="mb-2 text-3xl font-semibold text-brand-paper">Admin Login</h1>
           <p className="mb-6 text-sm text-brand-paper/80">Manage invitations and RSVPs securely.</p>
 
           <div className="mb-4">
             <label className="mb-2 block text-sm">Email</label>
-            <input className="input" value={email} onChange={(event) => setEmail(event.target.value)} type="email" required />
+            <input
+              className="input"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              type="email"
+              name="admin-email"
+              autoComplete="off"
+              required
+            />
           </div>
 
           <div className="mb-6">
@@ -84,6 +94,7 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               type="password"
+              name="admin-password"
               autoComplete="new-password"
               required
             />

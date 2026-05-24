@@ -37,6 +37,25 @@
   - `males-01.png`
   - `males-02.png`
 
+### Meals
+- Location: `public/images/meals/`
+- Name each file to match the dish slug:
+  - `garden-fresh-salad.png`
+  - `soup-of-the-day.png`
+  - `beef-dinner.png`
+  - `chicken-dinner.png`
+  - `vegetarian-plate.png`
+  - `chocolate-mousse.png`
+  - `fruit-platter.png`
+- In Admin Meals, use these paths in `Image URL`:
+  - `/images/meals/garden-fresh-salad.png`
+  - `/images/meals/soup-of-the-day.png`
+  - `/images/meals/beef-dinner.png`
+  - `/images/meals/chicken-dinner.png`
+  - `/images/meals/vegetarian-plate.png`
+  - `/images/meals/chocolate-mousse.png`
+  - `/images/meals/fruit-platter.png`
+
 ## Logo assets
 - Placeholder file in use:
   - `public/robokorda-logo-placeholder.svg`

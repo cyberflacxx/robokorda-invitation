@@ -5,5 +5,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getBaseUrl() {
-  return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const configured = process.env.NEXT_PUBLIC_BASE_URL?.trim();
+  if (configured && !configured.includes("localhost")) return configured;
+
+  const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (productionUrl) return productionUrl.startsWith("http") ? productionUrl : `https://${productionUrl}`;
+
+  return "https://robokorda-invitation.vercel.app";
 }

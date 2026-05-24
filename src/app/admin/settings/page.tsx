@@ -19,7 +19,7 @@ type Settings = {
 
 const defaults: Settings = {
   eventName: "Robokorda 10th Anniversary",
-  eventDate: "2026-12-12",
+  eventDate: "2026-09-13",
   eventTime: "18:00",
   venueName: "Robokorda Innovation Centre",
   venueAddress: "Harare, Zimbabwe",

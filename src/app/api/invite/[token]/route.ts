@@ -24,7 +24,7 @@ function getSampleGuestPayload(token: string) {
     },
     settings: {
       eventName: "Robokorda 10th Anniversary",
-      eventDate: "2026-12-12T00:00:00.000Z",
+      eventDate: "2026-09-13T00:00:00.000Z",
       eventTime: "18:00",
       venueName: "Robokorda Innovation Centre",
       venueAddress: "Harare, Zimbabwe",

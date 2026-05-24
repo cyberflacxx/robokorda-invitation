@@ -22,6 +22,7 @@ async function main() {
       description: "Crisp seasonal greens with citrus vinaigrette",
       category: "Starter",
       course: MealCourse.STARTER,
+      imageUrl: "/images/meals/garden-fresh-salad.png",
       availableQuantity: 100,
     },
     {
@@ -29,6 +30,7 @@ async function main() {
       description: "Chef-curated warm starter served with bread roll",
       category: "Starter",
       course: MealCourse.STARTER,
+      imageUrl: "/images/meals/soup-of-the-day.png",
       availableQuantity: 100,
     },
     {
@@ -36,6 +38,7 @@ async function main() {
       description: "Premium beef plate with sides",
       category: "Main",
       course: MealCourse.MAIN,
+      imageUrl: "/images/meals/beef-dinner.png",
       availableQuantity: 80,
     },
     {
@@ -43,6 +46,7 @@ async function main() {
       description: "Grilled chicken with vegetables",
       category: "Main",
       course: MealCourse.MAIN,
+      imageUrl: "/images/meals/chicken-dinner.png",
       availableQuantity: 90,
     },
     {
@@ -50,20 +54,15 @@ async function main() {
       description: "Fresh seasonal vegetarian platter",
       category: "Main",
       course: MealCourse.MAIN,
+      imageUrl: "/images/meals/vegetarian-plate.png",
       availableQuantity: 40,
-    },
-    {
-      name: "Vegan Plate",
-      description: "Plant-based gourmet plate",
-      category: "Main",
-      course: MealCourse.MAIN,
-      availableQuantity: 30,
     },
     {
       name: "Chocolate Mousse",
       description: "Rich chocolate dessert with cream topping",
       category: "Dessert",
       course: MealCourse.DESSERT,
+      imageUrl: "/images/meals/chocolate-mousse.png",
       availableQuantity: 100,
     },
     {
@@ -71,6 +70,7 @@ async function main() {
       description: "Freshly sliced seasonal fruits",
       category: "Dessert",
       course: MealCourse.DESSERT,
+      imageUrl: "/images/meals/fruit-platter.png",
       availableQuantity: 100,
     },
   ];
@@ -103,7 +103,7 @@ async function main() {
     where: { id: 1 },
     update: {
       eventName: "Robokorda 10th Anniversary",
-      eventDate: new Date("2026-12-12T00:00:00.000Z"),
+      eventDate: new Date("2026-09-13T00:00:00.000Z"),
       eventTime: "18:00",
       venueName: "Robokorda Innovation Centre",
       venueAddress: "Harare, Zimbabwe",
@@ -115,7 +115,7 @@ async function main() {
     },
     create: {
       eventName: "Robokorda 10th Anniversary",
-      eventDate: new Date("2026-12-12T00:00:00.000Z"),
+      eventDate: new Date("2026-09-13T00:00:00.000Z"),
       eventTime: "18:00",
       venueName: "Robokorda Innovation Centre",
       venueAddress: "Harare, Zimbabwe",

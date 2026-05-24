@@ -9,7 +9,6 @@ import {
   faClock,
   faLocationDot,
   faPhone,
-  faUsers,
   faChevronDown,
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,15 +26,6 @@ type MealItem = {
   imageUrl: string | null;
   availableQuantity: number;
   reservedQuantity: number;
-  isActive: boolean;
-};
-
-type TableItem = {
-  id: number;
-  tableName: string;
-  capacity: number;
-  reservedSeats: number;
-  locationNote: string | null;
   isActive: boolean;
 };
 
@@ -62,7 +52,6 @@ type InvitePayload = {
     heroImageUrl: string | null;
   } | null;
   meals: MealItem[];
-  tables: TableItem[];
   gallery: Array<{
     id: number;
     title: string;
@@ -115,19 +104,19 @@ const scheduleItems = [
 const dressGuides = {
   ladies: {
     title: "Ladies",
-    intro: "Elegant evening wear in jewel tones or classic neutrals.",
+    intro: "Elegant evening wear, long dress with heals, in jewel tones or classic neutrals.Any colour is allowed.",
     tip: "Floor-length gown, chic midi dress, or tailored jumpsuit with elegant heels.",
     samples: curatedImages.dress.ladies,
     helpName: "Event Styling Desk (Ladies)",
-    helpPhone: "+263 77 123 4567",
+    helpPhone: "+263 774 189 500",
   },
   males: {
     title: "Gentlemen",
-    intro: "Corporate formal with clean tailoring and sharp finishing.",
+    intro: "Black Tie,Corporate formal with clean tailoring and sharp finishing. Mainly black and grey suits",
     tip: "Well-fitted suit or blazer with dress shirt, tie or pocket square.",
     samples: curatedImages.dress.males,
     helpName: "Event Styling Desk (Gents)",
-    helpPhone: "+263 78 765 4321",
+    helpPhone: "+263 77 500 9390",
   },
 };
 
@@ -267,7 +256,6 @@ export function InviteClient({ token }: { token: string }) {
   const [starterId, setStarterId] = useState<number | null>(null);
   const [mainId, setMainId] = useState<number | null>(null);
   const [dessertId, setDessertId] = useState<number | null>(null);
-  const [tableId, setTableId] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const [countdown, setCountdown] = useState("00d 00h 00m 00s");
 
@@ -286,7 +274,6 @@ export function InviteClient({ token }: { token: string }) {
       setStarterId(payload.guest.selectedStarterId);
       setMainId(payload.guest.selectedMainId);
       setDessertId(payload.guest.selectedDessertId);
-      setTableId(payload.guest.selectedTableId);
       setStatus(payload.guest.rsvpStatus === "PENDING" ? "ACCEPT" : payload.guest.rsvpStatus);
       setLoading(false);
     };
@@ -326,27 +313,6 @@ export function InviteClient({ token }: { token: string }) {
     };
   }, [data?.meals]);
 
-  const availableTables = useMemo(
-    () => (data?.tables ?? []).map((t) => ({ ...t, isAvailable: t.reservedSeats < t.capacity })),
-    [data?.tables],
-  );
-
-  const finalGallery = useMemo(() => {
-    const fromAdmin = data?.gallery.filter((img) => img.type === "GALLERY") ?? [];
-    if (fromAdmin.length >= 10) return fromAdmin;
-    const merged = [...fromAdmin];
-    for (let i = fromAdmin.length; i < 12; i++) {
-      merged.push({
-        id: 90000 + i,
-        title: `Robokorda Moment ${i + 1}`,
-        imageUrl: curatedImages.gallery[i % curatedImages.gallery.length],
-        type: "GALLERY",
-        isHero: false,
-      });
-    }
-    return merged;
-  }, [data?.gallery]);
-
   const submitRSVP = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -360,7 +326,6 @@ export function InviteClient({ token }: { token: string }) {
         starterId: status === "DECLINE" ? null : starterId,
         mainId:    status === "DECLINE" ? null : mainId,
         dessertId: status === "DECLINE" ? null : dessertId,
-        tableId:   status === "DECLINE" ? null : tableId,
         notes,
       }),
     });
@@ -407,11 +372,19 @@ export function InviteClient({ token }: { token: string }) {
         }}
       >
         <div className="container d-flex align-items-center justify-content-between py-3">
-          <span className="text-sm font-semibold tracking-widest text-brand-gold uppercase">
-            {data.settings?.eventName?.slice(0, 12) ?? "Event"}
-          </span>
+          <div className="d-flex align-items-center gap-2">
+            <img
+              src="/robokorda-logo.png"
+              alt="Rbokorda Africa logo"
+              className="rounded"
+              style={{ width: "36px", height: "36px", objectFit: "contain" }}
+            />
+            <span className="text-sm font-semibold tracking-widest text-brand-gold uppercase">
+              Rbokorda Africa
+            </span>
+          </div>
           <nav className="hidden items-center gap-5 text-xs font-medium tracking-wide uppercase text-brand-paper/70 md:flex">
-            {["Schedule", "Venue", "Dress Code", "RSVP", "Gallery", "FAQ"].map((label) => (
+            {["Schedule", "Venue", "Dress Code", "RSVP", "FAQ"].map((label) => (
               <a
                 key={label}
                 href={`#${label.toLowerCase().replace(" ", "-")}`}
@@ -459,9 +432,9 @@ export function InviteClient({ token }: { token: string }) {
         <div className="container">
           <div className="row g-3">
             {[
-              { icon: faCalendarDays, label: "Date", value: new Date(data.settings?.eventDate ?? "2026-12-12").toDateString() },
+              { icon: faCalendarDays, label: "Date", value: new Date(data.settings?.eventDate ?? "2026-09-13").toDateString() },
               { icon: faClock, label: "Time", value: data.settings?.eventTime ?? "18:00" },
-              { icon: faLocationDot, label: "Venue", value: data.settings?.venueName ?? "-", sub: data.settings?.venueAddress },
+              { icon: faLocationDot, label: "Venue", value: "To be advised", sub: "To be advised" },
             ].map(({ icon, label, value, sub }) => (
               <div key={label} className="col-12 col-md-6 col-lg-4">
                 <div className="d-flex align-items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
@@ -508,8 +481,8 @@ export function InviteClient({ token }: { token: string }) {
           <div className="row g-4">
             <div className="col-12 col-lg-6">
               <img src={curatedImages.venue[2]} alt="Venue" className="h-64 w-full rounded-2xl object-cover border border-white/10" />
-              <p className="mt-4 text-lg font-semibold">{data.settings?.venueName}</p>
-              <p className="mt-1 text-sm text-brand-paper/70">{data.settings?.venueAddress}</p>
+              <p className="mt-4 text-lg font-semibold">To be advised</p>
+              <p className="mt-1 text-sm text-brand-paper/70">To be advised</p>
             </div>
             <div className="col-12 col-lg-6">
               <div className="space-y-4">
@@ -518,14 +491,6 @@ export function InviteClient({ token }: { token: string }) {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-brand-paper/60">Dress Code</span><span>{data.settings?.dressCode || "Formal"}</span></div>
                   <div className="flex justify-between"><span className="text-brand-paper/60">Theme</span><span>{data.settings?.theme || "-"}</span></div>
-                </div>
-              </div>
-              <div className="row g-3">
-                <div className="col-6">
-                  <img src={curatedImages.gallery[6]} alt="Atmosphere" className="h-44 w-full rounded-2xl object-cover border border-white/10" />
-                </div>
-                <div className="col-6">
-                  <img src={curatedImages.gallery[7]} alt="Atmosphere" className="h-44 w-full rounded-2xl object-cover border border-white/10" />
                 </div>
               </div>
               </div>
@@ -609,52 +574,8 @@ export function InviteClient({ token }: { token: string }) {
               </div>
             </div>
 
-            {/* Table selection */}
             {needsMeals && (
               <>
-                <div>
-                  <label className="mb-3 flex items-center gap-2 text-sm font-semibold">
-                    <FontAwesomeIcon icon={faUsers} className="text-brand-gold" />
-                    Table Selection {!isSubmitted && <span className="text-xs font-normal text-brand-paper/50">(required)</span>}
-                  </label>
-                  <div className="row g-3">
-                    {availableTables.map((table) => {
-                      const left = table.capacity - table.reservedSeats;
-                      const sel = tableId === table.id;
-                      const unavail = !table.isAvailable || isSubmitted;
-                      return (
-                        <div key={table.id} className="col-12 col-sm-6 col-lg-4">
-                          <button
-                            type="button"
-                            onClick={unavail ? undefined : () => setTableId(sel ? null : table.id)}
-                            className={`w-100 rounded-xl border p-4 text-left transition ${
-                              sel
-                                ? "border-brand-gold bg-brand-gold/10 ring-1 ring-brand-gold/40"
-                                : unavail
-                                ? "cursor-not-allowed border-white/10 opacity-50"
-                                : "border-white/15 hover:border-brand-gold/40 cursor-pointer"
-                            }`}
-                          >
-                          <div className="flex items-center justify-between">
-                            <p className="font-semibold text-sm">{table.tableName}</p>
-                            {sel && <FontAwesomeIcon icon={faCheckCircle} className="text-brand-gold text-sm" />}
-                          </div>
-                          <p className="mt-1 text-xs text-brand-paper/60">{table.locationNote || "Main Hall"}</p>
-                          <div className="mt-2 flex items-center gap-2">
-                            <div className="flex gap-0.5">
-                              {Array.from({ length: Math.min(table.capacity, 10) }).map((_, i) => (
-                                <span key={i} className={`h-2 w-2 rounded-full ${i < table.reservedSeats ? "bg-brand-gold" : "bg-brand-gold/20"}`} />
-                              ))}
-                            </div>
-                            <span className="text-xs text-brand-gold">{left} left</span>
-                          </div>
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
                 {/* Menu selection per course */}
                 <div>
                   <p className="mb-3 text-sm font-semibold">
@@ -703,28 +624,6 @@ export function InviteClient({ token }: { token: string }) {
               {submitting ? "Submitting..." : isSubmitted ? "RSVP Submitted" : "Confirm RSVP"}
             </button>
           </form>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery */}
-      <section id="gallery" className="py-16">
-        <div className="container">
-          <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Moments</p>
-          <h2 className="mb-8 text-3xl font-semibold">Gallery</h2>
-          <div className="row g-3">
-            {finalGallery.map((img) => (
-              <div key={img.id} className="col-6 col-md-4 col-lg-3">
-                <figure className="mb-0 overflow-hidden rounded-2xl border border-white/10">
-                  <img
-                    src={img.imageUrl}
-                    alt={img.title}
-                    className="w-full object-cover transition duration-500 hover:scale-105"
-                    style={{ height: "220px" }}
-                  />
-                </figure>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -797,4 +696,3 @@ export function InviteClient({ token }: { token: string }) {
     </div>
   );
 }
-

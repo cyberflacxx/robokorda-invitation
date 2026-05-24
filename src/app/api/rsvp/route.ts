@@ -44,8 +44,8 @@ export async function POST(request: Request) {
         const needsReservation =
           payload.status === RSVPStatus.ACCEPT || payload.status === RSVPStatus.MAYBE;
 
-        if (needsReservation && (!payload.mainId || !payload.tableId)) {
-          throw new Error("A main course and table selection are required when accepting");
+        if (needsReservation && !payload.mainId) {
+          throw new Error("A main course selection is required when accepting");
         }
 
         await reserveMeal(tx, payload.starterId);
