@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("admin@robokorda.com");
-  const [password, setPassword] = useState("Admin@12345");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (event: React.FormEvent) => {
@@ -62,7 +62,12 @@ export default function AdminLoginPage() {
       </header>
 
       <main className="d-flex align-items-center justify-content-center px-4 py-5" style={{ minHeight: "calc(100vh - 148px)" }}>
-        <form onSubmit={onSubmit} className="w-100 rounded-3xl border border-brand-gold/30 bg-brand-black/70 p-8 text-brand-paper shadow-glow backdrop-blur" style={{ maxWidth: "420px" }}>
+        <form
+          onSubmit={onSubmit}
+          autoComplete="off"
+          className="w-100 rounded-3xl border border-brand-gold/30 bg-brand-black/70 p-8 text-brand-paper shadow-glow backdrop-blur"
+          style={{ maxWidth: "420px" }}
+        >
           <p className="mb-2 text-xs uppercase tracking-[0.25em] text-brand-gold">Control Center</p>
           <h1 className="mb-2 text-3xl font-semibold text-brand-paper">Admin Login</h1>
           <p className="mb-6 text-sm text-brand-paper/80">Manage invitations and RSVPs securely.</p>
@@ -74,7 +79,14 @@ export default function AdminLoginPage() {
 
           <div className="mb-6">
             <label className="mb-2 block text-sm">Password</label>
-            <input className="input" value={password} onChange={(event) => setPassword(event.target.value)} type="password" required />
+            <input
+              className="input"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              autoComplete="new-password"
+              required
+            />
           </div>
 
           <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
