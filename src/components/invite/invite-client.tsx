@@ -375,12 +375,12 @@ export function InviteClient({ token }: { token: string }) {
           <div className="d-flex align-items-center gap-2">
             <img
               src="/robokorda-logo.png"
-              alt="Rbokorda Africa logo"
+              alt="Robokorda Africa logo"
               className="rounded"
               style={{ width: "36px", height: "36px", objectFit: "contain" }}
             />
             <span className="text-sm font-semibold tracking-widest text-brand-gold uppercase">
-              Rbokorda Africa
+              Robokorda Africa
             </span>
           </div>
           <nav className="hidden items-center gap-5 text-xs font-medium tracking-wide uppercase text-brand-paper/70 md:flex">
