@@ -245,6 +245,7 @@ function CourseSection({
 }
 
 export function InviteClient({ token }: { token: string }) {
+  const redirectUrl = "https://robokorda-africa.com/";
   const currentYear = new Date().getFullYear();
   const [data, setData] = useState<InvitePayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -297,6 +298,17 @@ export function InviteClient({ token }: { token: string }) {
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, [data?.settings?.eventDate, data?.settings?.eventTime]);
+
+  useEffect(() => {
+    if (!data || loading || error || data.guest.rsvpStatus === "PENDING") return;
+
+    // Redirect guests to the main RoboKorda Africa website after viewing the invitation.
+    const timer = window.setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [data, error, loading, redirectUrl]);
 
   const heroImage = useMemo(
     () => data?.gallery.find((img) => img.isHero)?.imageUrl || data?.settings?.heroImageUrl || curatedImages.hero,
@@ -434,7 +446,7 @@ export function InviteClient({ token }: { token: string }) {
             {[
               { icon: faCalendarDays, label: "Date", value: new Date(data.settings?.eventDate ?? "2026-09-13").toDateString() },
               { icon: faClock, label: "Time", value: data.settings?.eventTime ?? "18:00" },
-              { icon: faLocationDot, label: "Venue", value: "To be advised", sub: "To be advised" },
+              { icon: faLocationDot, label: "Venue", value: data.settings?.venueName ?? "Manna Safari Lodge", sub: data.settings?.venueAddress ?? "Manna Safari Lodge" },
             ].map(({ icon, label, value, sub }) => (
               <div key={label} className="col-12 col-md-6 col-lg-4">
                 <div className="d-flex align-items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
@@ -481,8 +493,8 @@ export function InviteClient({ token }: { token: string }) {
           <div className="row g-4">
             <div className="col-12 col-lg-6">
               <img src={curatedImages.venue[2]} alt="Venue" className="h-64 w-full rounded-2xl object-cover border border-white/10" />
-              <p className="mt-4 text-lg font-semibold">To be advised</p>
-              <p className="mt-1 text-sm text-brand-paper/70">To be advised</p>
+              <p className="mt-4 text-lg font-semibold">{data.settings?.venueName ?? "Manna Safari Lodge"}</p>
+              <p className="mt-1 text-sm text-brand-paper/70">{data.settings?.venueAddress ?? "Manna Safari Lodge"}</p>
             </div>
             <div className="col-12 col-lg-6">
               <div className="space-y-4">

@@ -28,11 +28,12 @@ function buildTransporter() {
 }
 
 function htmlTemplate(params: InvitationEmailParams): string {
-  const { guestName, eventName, rsvpCode, inviteLink, eventDate } = params;
+  const { guestName, eventName, rsvpCode, inviteLink, eventDate, venueName, venueAddress } = params;
   const firstName = guestName.split(" ")[0];
   const dateDisplay = eventDate
     ? new Date(eventDate).toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
     : "";
+  const venueDisplay = venueName || venueAddress || "Manna Safari Lodge";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -78,6 +79,10 @@ function htmlTemplate(params: InvitationEmailParams): string {
                 Use this code when you open your invitation to confirm your attendance and choose your preferred meal for each course (starter, main, and dessert).
               </p>
 
+              <p style="margin:0 0 24px;color:#4a5568;font-size:15px;line-height:1.7;">
+                Venue: <strong>${venueDisplay}</strong>
+              </p>
+
               <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
                 <tr>
@@ -100,7 +105,7 @@ function htmlTemplate(params: InvitationEmailParams): string {
           <tr>
             <td style="background:#0B1F3A;padding:24px 40px;text-align:center;">
               <p style="margin:0 0 4px;color:#D4AF37;font-size:14px;font-weight:600;">${eventName}</p>
-              <p style="margin:0;color:#bcccdc;font-size:13px;">Venue: To be advised</p>
+              <p style="margin:0;color:#bcccdc;font-size:13px;">Venue: ${venueDisplay}</p>
             </td>
           </tr>
 
@@ -119,7 +124,8 @@ export async function sendInvitationEmail(params: InvitationEmailParams): Promis
 
   const firstName = params.guestName.split(" ")[0];
   const senderAppName = getSenderAppName();
-  const text = `Hi ${firstName}!\nI hope that you're well. Please find details about ${params.eventName} here. RSVP code is ${params.rsvpCode}. Looking forward to seeing you.\n${params.inviteLink}`;
+  const venueDisplay = params.venueName || params.venueAddress || "Manna Safari Lodge";
+  const text = `Hi ${firstName}!\nI hope that you're well. Please find details about ${params.eventName} here. Venue: ${venueDisplay}. RSVP code is ${params.rsvpCode}. Looking forward to seeing you.\n${params.inviteLink}`;
 
   const transporter = buildTransporter();
 

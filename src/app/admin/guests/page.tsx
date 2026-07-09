@@ -194,7 +194,7 @@ export default function AdminGuestsPage() {
 
   const copyMessage = async (guest: Guest) => {
     const link = `${baseUrl}/invite/${guest.inviteToken}`;
-    const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you.\n${link}`;
+    const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you.\n${link}`;
     await navigator.clipboard.writeText(message);
     toast.success("Invite message copied");
   };
@@ -343,7 +343,7 @@ export default function AdminGuestsPage() {
             {guests.map((guest) => {
               const link = `${baseUrl}/invite/${guest.inviteToken}`;
               const message = encodeURIComponent(
-                `Hi ${guest.fullName}! I hope that you're well. Please find details about the event here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
+                `Hi ${guest.fullName}! I hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
               );
               return (
                 <article key={guest.id} className="rounded-xl border border-brand-gold/20 bg-brand-black/25 p-3">
@@ -400,7 +400,7 @@ export default function AdminGuestsPage() {
               {guests.map((guest) => {
                 const link = `${baseUrl}/invite/${guest.inviteToken}`;
                 const message = encodeURIComponent(
-                  `Hi ${guest.fullName}! I hope that you're well. Please find details about the event here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
+                  `Hi ${guest.fullName}! I hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
                 );
                 const menuSummary = [
                   guest.selectedStarter?.name,

@@ -19,7 +19,7 @@ const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Robokorda 10th Anniversary Invitations",
-  description: "Private invitation and RSVP platform for Robokorda's 10th Anniversary.",
+  description: "Private invitation and RSVP platform for Robokorda's 10th Anniversary at Manna Safari Lodge.",
 };
 
 export default function RootLayout({
