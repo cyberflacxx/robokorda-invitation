@@ -33,7 +33,9 @@ function htmlTemplate(params: InvitationEmailParams): string {
   const dateDisplay = eventDate
     ? new Date(eventDate).toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
     : "";
-  const venueDisplay = venueName || venueAddress || "Manna Safari Lodge";
+  const venueDisplay = venueName && venueAddress
+    ? `${venueName}, ${venueAddress}`
+    : venueName || venueAddress || "Manna Safari Lodge, Harare Zimbabwe";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -124,7 +126,9 @@ export async function sendInvitationEmail(params: InvitationEmailParams): Promis
 
   const firstName = params.guestName.split(" ")[0];
   const senderAppName = getSenderAppName();
-  const venueDisplay = params.venueName || params.venueAddress || "Manna Safari Lodge";
+  const venueDisplay = params.venueName && params.venueAddress
+    ? `${params.venueName}, ${params.venueAddress}`
+    : params.venueName || params.venueAddress || "Manna Safari Lodge, Harare Zimbabwe";
   const text = `Hi ${firstName}!\nI hope that you're well. Please find details about ${params.eventName} here. Venue: ${venueDisplay}. RSVP code is ${params.rsvpCode}. Looking forward to seeing you.\n${params.inviteLink}`;
 
   const transporter = buildTransporter();

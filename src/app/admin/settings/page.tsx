@@ -22,7 +22,7 @@ const defaults: Settings = {
   eventDate: "2026-09-13",
   eventTime: "18:00",
   venueName: "Manna Safari Lodge",
-  venueAddress: "Manna Safari Lodge",
+  venueAddress: "Harare Zimbabwe",
   dressCode: "Formal / Corporate Elegant",
   theme: "Celebrating 10 Years of Innovation",
   heroImageUrl: "",

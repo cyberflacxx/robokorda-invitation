@@ -50,6 +50,28 @@ const defaultForm = {
   phone: "",
 };
 
+function normalizeWhatsAppNumber(phone: string | null | undefined) {
+  if (!phone) return null;
+
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return null;
+  if (digits.startsWith("00")) return digits.slice(2);
+  if (digits.startsWith("0")) return `263${digits.slice(1)}`;
+  return digits;
+}
+
+function buildInviteMessage(guest: Pick<Guest, "fullName" | "rsvpCode" | "inviteToken">, baseUrl: string) {
+  const link = `${baseUrl}/invite/${guest.inviteToken}`;
+  const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event here. Venue: Manna Safari Lodge, Harare Zimbabwe. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you.\n${link}`;
+  return { link, message };
+}
+
+function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
+  const normalized = normalizeWhatsAppNumber(phone);
+  if (!normalized) return null;
+  return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+}
+
 async function safeJson<T>(response: Response): Promise<T | null> {
   try {
     const raw = await response.text();
@@ -97,6 +119,8 @@ export default function AdminGuestsPage() {
 
   const createGuest = async (event: React.FormEvent) => {
     event.preventDefault();
+    const pendingWhatsAppNumber = normalizeWhatsAppNumber(form.phone);
+    const pendingWindow = pendingWhatsAppNumber ? window.open("", "_blank", "noopener,noreferrer") : null;
     const response = await fetch("/api/admin/guests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -104,6 +128,7 @@ export default function AdminGuestsPage() {
     });
     const body = await safeJson<{ guest?: Guest; error?: string }>(response);
     if (!response.ok) {
+      pendingWindow?.close();
       toast.error(body?.error || "Failed to create guest");
       return;
     }
@@ -111,6 +136,19 @@ export default function AdminGuestsPage() {
     toast.success(form.email ? "Guest created & invitation email sent" : "Guest created");
     if (generatedCode) {
       toast.success(`Reservation code generated: ${generatedCode}`);
+    }
+    if (body?.guest) {
+      const { message } = buildInviteMessage(body.guest, baseUrl);
+      const whatsappUrl = buildWhatsAppUrl(body.guest.phone, message);
+      if (pendingWindow) {
+        if (whatsappUrl) {
+          pendingWindow.location.href = whatsappUrl;
+        } else {
+          pendingWindow.close();
+        }
+      } else if (whatsappUrl) {
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+      }
     }
     setForm(defaultForm);
     void loadGuests();
@@ -193,8 +231,7 @@ export default function AdminGuestsPage() {
   const baseUrl = useMemo(() => getBaseUrl(), []);
 
   const copyMessage = async (guest: Guest) => {
-    const link = `${baseUrl}/invite/${guest.inviteToken}`;
-    const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you.\n${link}`;
+    const { message } = buildInviteMessage(guest, baseUrl);
     await navigator.clipboard.writeText(message);
     toast.success("Invite message copied");
   };
@@ -341,10 +378,8 @@ export default function AdminGuestsPage() {
           <>
           <div className="space-y-3 md:hidden">
             {guests.map((guest) => {
-              const link = `${baseUrl}/invite/${guest.inviteToken}`;
-              const message = encodeURIComponent(
-                `Hi ${guest.fullName}! I hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
-              );
+              const { link, message } = buildInviteMessage(guest, baseUrl);
+              const whatsappUrl = buildWhatsAppUrl(guest.phone, message);
               return (
                 <article key={guest.id} className="rounded-xl border border-brand-gold/20 bg-brand-black/25 p-3">
                   <div className="mb-1 flex items-center justify-between gap-2">
@@ -371,7 +406,7 @@ export default function AdminGuestsPage() {
                     <button type="button" onClick={() => navigator.clipboard.writeText(link).then(() => toast.success("Link copied"))} className="rounded-lg border border-brand-gold/25 px-2 py-1 text-xs transition hover:bg-brand-gold/10" title="Copy invite link">
                       <FontAwesomeIcon icon={faCopy} />
                     </button>
-                    <a href={`https://wa.me/?text=${message}`} target="_blank" rel="noreferrer" className="rounded-lg border border-brand-gold/25 px-2 py-1 text-xs transition hover:bg-brand-gold/10" title="WhatsApp">
+                    <a href={whatsappUrl ?? `https://wa.me/?text=${encodeURIComponent(message)}`} target="_blank" rel="noreferrer" className="rounded-lg border border-brand-gold/25 px-2 py-1 text-xs transition hover:bg-brand-gold/10" title="WhatsApp">
                       <FontAwesomeIcon icon={faWhatsapp} />
                     </a>
                     <button type="button" onClick={() => void removeGuest(guest.id)} className="rounded-lg border border-red-400/50 bg-red-500/10 px-2 py-1 text-xs text-red-300 transition hover:bg-red-500/20" title="Delete">
@@ -398,10 +433,8 @@ export default function AdminGuestsPage() {
             </thead>
             <tbody>
               {guests.map((guest) => {
-                const link = `${baseUrl}/invite/${guest.inviteToken}`;
-                const message = encodeURIComponent(
-                  `Hi ${guest.fullName}! I hope that you're well. Please find details about the event at Manna Safari Lodge here. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you. ${link}`,
-                );
+                const { link, message } = buildInviteMessage(guest, baseUrl);
+                const whatsappUrl = buildWhatsAppUrl(guest.phone, message);
                 const menuSummary = [
                   guest.selectedStarter?.name,
                   guest.selectedMain?.name,
@@ -457,7 +490,7 @@ export default function AdminGuestsPage() {
                           Msg
                         </button>
                         <a
-                          href={`https://wa.me/?text=${message}`}
+                          href={whatsappUrl ?? `https://wa.me/?text=${encodeURIComponent(message)}`}
                           target="_blank"
                           rel="noreferrer"
                           className="rounded-lg border border-brand-gold/25 px-2 py-1.5 text-xs transition hover:bg-brand-gold/10"
@@ -466,7 +499,7 @@ export default function AdminGuestsPage() {
                           <FontAwesomeIcon icon={faWhatsapp} />
                         </a>
                         <a
-                          href={`mailto:${guest.email ?? ""}?subject=You%27re%20Invited&body=${message}`}
+                          href={`mailto:${guest.email ?? ""}?subject=You%27re%20Invited&body=${encodeURIComponent(message)}`}
                           className="rounded-lg border border-brand-gold/25 px-2 py-1.5 text-xs transition hover:bg-brand-gold/10"
                           title="Open in mail client"
                         >

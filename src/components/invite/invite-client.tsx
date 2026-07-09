@@ -446,7 +446,7 @@ export function InviteClient({ token }: { token: string }) {
             {[
               { icon: faCalendarDays, label: "Date", value: new Date(data.settings?.eventDate ?? "2026-09-13").toDateString() },
               { icon: faClock, label: "Time", value: data.settings?.eventTime ?? "18:00" },
-              { icon: faLocationDot, label: "Venue", value: data.settings?.venueName ?? "Manna Safari Lodge", sub: data.settings?.venueAddress ?? "Manna Safari Lodge" },
+              { icon: faLocationDot, label: "Venue", value: data.settings?.venueName ?? "Manna Safari Lodge", sub: data.settings?.venueAddress ?? "Harare Zimbabwe" },
             ].map(({ icon, label, value, sub }) => (
               <div key={label} className="col-12 col-md-6 col-lg-4">
                 <div className="d-flex align-items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
@@ -494,7 +494,7 @@ export function InviteClient({ token }: { token: string }) {
             <div className="col-12 col-lg-6">
               <img src={curatedImages.venue[2]} alt="Venue" className="h-64 w-full rounded-2xl object-cover border border-white/10" />
               <p className="mt-4 text-lg font-semibold">{data.settings?.venueName ?? "Manna Safari Lodge"}</p>
-              <p className="mt-1 text-sm text-brand-paper/70">{data.settings?.venueAddress ?? "Manna Safari Lodge"}</p>
+              <p className="mt-1 text-sm text-brand-paper/70">{data.settings?.venueAddress ?? "Harare Zimbabwe"}</p>
             </div>
             <div className="col-12 col-lg-6">
               <div className="space-y-4">
