@@ -115,8 +115,6 @@ export default function AdminGuestsPage() {
 
   const createGuest = async (event: React.FormEvent) => {
     event.preventDefault();
-    const pendingWhatsAppNumber = normalizeWhatsAppNumber(form.phone);
-    const pendingWindow = pendingWhatsAppNumber ? window.open("", "_blank", "noopener,noreferrer") : null;
     const response = await fetch("/api/admin/guests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -124,7 +122,6 @@ export default function AdminGuestsPage() {
     });
     const body = await safeJson<{ guest?: Guest; error?: string }>(response);
     if (!response.ok) {
-      pendingWindow?.close();
       toast.error(body?.error || "Failed to create guest");
       return;
     }
@@ -133,18 +130,8 @@ export default function AdminGuestsPage() {
     if (generatedCode) {
       toast.success(`Reservation code generated: ${generatedCode}`);
     }
-    if (body?.guest) {
-      const { message } = buildInviteMessage(body.guest, baseUrl);
-      const whatsappUrl = buildWhatsAppUrl(body.guest.phone, message);
-      if (pendingWindow) {
-        if (whatsappUrl) {
-          pendingWindow.location.href = whatsappUrl;
-        } else {
-          pendingWindow.close();
-        }
-      } else if (whatsappUrl) {
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-      }
+    if (body?.guest?.phone) {
+      toast("Use the WhatsApp button on the guest row if you want to send the link there.");
     }
     setForm(defaultForm);
     void loadGuests();
