@@ -17,10 +17,6 @@ function getSampleGuestPayload(token: string) {
       inviteToken: token,
       rsvpCode: sample.rsvpCode,
       rsvpStatus: "PENDING",
-      selectedStarterId: null,
-      selectedMainId: null,
-      selectedDessertId: null,
-      selectedTableId: null,
     },
     settings: {
       eventName: "Robokorda 10th Anniversary",
@@ -32,8 +28,6 @@ function getSampleGuestPayload(token: string) {
       theme: "Celebrating 10 Years of Innovation",
       heroImageUrl: null,
     },
-    meals: [],
-    tables: [],
     gallery: [],
   };
 }
@@ -48,10 +42,6 @@ export async function GET(
     const guest = await prisma.guest.findUnique({
       where: { inviteToken: token },
       include: {
-        selectedStarter: true,
-        selectedMain: true,
-        selectedDessert: true,
-        selectedTable: true,
         rsvp: true,
       },
     });
@@ -62,14 +52,12 @@ export async function GET(
       return NextResponse.json({ error: "Invitation not found" }, { status: 404 });
     }
 
-    const [settings, meals, tables, gallery] = await Promise.all([
+    const [settings, gallery] = await Promise.all([
       prisma.eventSetting.findFirst({ orderBy: { id: "asc" } }),
-      prisma.meal.findMany({ where: { isActive: true }, orderBy: [{ course: "asc" }, { name: "asc" }] }),
-      prisma.eventTable.findMany({ where: { isActive: true }, orderBy: { tableName: "asc" } }),
       prisma.galleryImage.findMany({ orderBy: { createdAt: "desc" } }),
     ]);
 
-    return NextResponse.json({ guest, settings, meals, tables, gallery });
+    return NextResponse.json({ guest, settings, gallery });
   } catch {
     const samplePayload = getSampleGuestPayload(token);
     if (samplePayload) return NextResponse.json(samplePayload);

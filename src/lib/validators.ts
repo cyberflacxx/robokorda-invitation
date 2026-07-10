@@ -47,10 +47,6 @@ export const rsvpSchema = z.object({
   token: z.string().min(8),
   rsvpCode: z.string().min(4),
   status: z.nativeEnum(RSVPStatus),
-  starterId: z.number().int().positive().optional().nullable(),
-  mainId: z.number().int().positive().optional().nullable(),
-  dessertId: z.number().int().positive().optional().nullable(),
-  tableId: z.number().int().positive().optional().nullable(),
   notes: z.string().max(500).optional().nullable(),
 });
 

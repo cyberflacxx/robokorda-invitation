@@ -3,14 +3,6 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { rsvpSchema } from "@/lib/validators";
 
-async function reserveMeal(tx: Prisma.TransactionClient, mealId: number | null | undefined) {
-  if (!mealId) return;
-  const meal = await tx.meal.findUnique({ where: { id: mealId } });
-  if (!meal || !meal.isActive) throw new Error(`Meal (id ${mealId}) is not available`);
-  if (meal.reservedQuantity >= meal.availableQuantity) throw new Error(`${meal.name} is fully booked`);
-  await tx.meal.update({ where: { id: meal.id }, data: { reservedQuantity: { increment: 1 } } });
-}
-
 export async function POST(request: Request) {
   try {
     const json = await request.json();
@@ -41,36 +33,11 @@ export async function POST(request: Request) {
           throw new Error("Guest profile is missing gender. Please contact the host.");
         }
 
-        const needsReservation =
-          payload.status === RSVPStatus.ACCEPT || payload.status === RSVPStatus.MAYBE;
-
-        if (needsReservation && !payload.mainId) {
-          throw new Error("A main course selection is required when accepting");
-        }
-
-        await reserveMeal(tx, payload.starterId);
-        await reserveMeal(tx, payload.mainId);
-        await reserveMeal(tx, payload.dessertId);
-
-        if (payload.tableId) {
-          const table = await tx.eventTable.findUnique({ where: { id: payload.tableId } });
-          if (!table || !table.isActive) throw new Error("Selected table is not available");
-          if (table.reservedSeats >= table.capacity) throw new Error("Selected table is fully booked");
-          await tx.eventTable.update({
-            where: { id: table.id },
-            data: { reservedSeats: { increment: 1 } },
-          });
-        }
-
         const rsvp = await tx.rSVP.create({
           data: {
             guestId: guest.id,
             status: payload.status,
             gender: guest.gender,
-            starterId: payload.starterId ?? null,
-            mainId: payload.mainId ?? null,
-            dessertId: payload.dessertId ?? null,
-            tableId: payload.tableId ?? null,
             notes: payload.notes ?? null,
           },
         });
@@ -79,10 +46,10 @@ export async function POST(request: Request) {
           where: { id: guest.id },
           data: {
             rsvpStatus: payload.status,
-            selectedStarterId: payload.starterId ?? null,
-            selectedMainId: payload.mainId ?? null,
-            selectedDessertId: payload.dessertId ?? null,
-            selectedTableId: payload.tableId ?? null,
+            selectedStarterId: null,
+            selectedMainId: null,
+            selectedDessertId: null,
+            selectedTableId: null,
           },
         });
 
@@ -97,10 +64,7 @@ export async function POST(request: Request) {
     const status =
       message.includes("already") ||
       message.includes("Invalid") ||
-      message.includes("required") ||
-      message.includes("missing gender") ||
-      message.includes("booked") ||
-      message.includes("available")
+      message.includes("missing gender")
         ? 400
         : 500;
     return NextResponse.json({ error: message }, { status });

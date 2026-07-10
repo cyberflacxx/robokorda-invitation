@@ -29,8 +29,6 @@ Full-stack private invitation platform built with Next.js, TypeScript, Tailwind 
   - Personalized invite link copy
   - Invitation message generator + copy
   - WhatsApp and Email share actions
-- Meal management at `/admin/meals`
-- Table management at `/admin/tables`
 - Gallery management at `/admin/gallery`
 - Event settings at `/admin/settings`
 - QR code check-in flow at `/admin/checkin`

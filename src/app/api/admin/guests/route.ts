@@ -46,10 +46,6 @@ export async function GET(request: NextRequest) {
           : {}),
       },
       include: {
-        selectedStarter: true,
-        selectedMain: true,
-        selectedDessert: true,
-        selectedTable: true,
         rsvp: true,
       },
       orderBy: { createdAt: "desc" },

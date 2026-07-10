@@ -10,24 +10,9 @@ import {
   faLocationDot,
   faPhone,
   faChevronDown,
-  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { RSVP_STATUSES, type RSVPStatusType } from "@/lib/enums";
-
-type MealCourse = "STARTER" | "MAIN" | "DESSERT";
-
-type MealItem = {
-  id: number;
-  name: string;
-  description: string | null;
-  course: MealCourse;
-  category: string | null;
-  imageUrl: string | null;
-  availableQuantity: number;
-  reservedQuantity: number;
-  isActive: boolean;
-};
 
 type InvitePayload = {
   guest: {
@@ -36,10 +21,6 @@ type InvitePayload = {
     inviteToken: string;
     rsvpCode: string;
     rsvpStatus: RSVPStatusType;
-    selectedStarterId: number | null;
-    selectedMainId: number | null;
-    selectedDessertId: number | null;
-    selectedTableId: number | null;
   };
   settings: {
     eventName: string;
@@ -51,7 +32,6 @@ type InvitePayload = {
     theme: string | null;
     heroImageUrl: string | null;
   } | null;
-  meals: MealItem[];
   gallery: Array<{
     id: number;
     title: string;
@@ -120,130 +100,6 @@ const dressGuides = {
   },
 };
 
-const courseLabels: Record<MealCourse, string> = {
-  STARTER: "Starter",
-  MAIN: "Main Course",
-  DESSERT: "Dessert",
-};
-
-function MealCard({
-  meal,
-  selected,
-  onSelect,
-  disabled,
-  fallbackImage,
-}: {
-  meal: MealItem & { isAvailable: boolean };
-  selected: boolean;
-  onSelect: () => void;
-  disabled: boolean;
-  fallbackImage: string;
-}) {
-  const unavailable = !meal.isAvailable || disabled;
-
-  return (
-    <button
-      type="button"
-      onClick={unavailable ? undefined : onSelect}
-      className={`group relative overflow-hidden rounded-2xl border text-left transition-all duration-200 ${
-        selected
-          ? "border-brand-gold ring-2 ring-brand-gold/50"
-          : unavailable
-          ? "cursor-not-allowed border-brand-gold/10 opacity-50"
-          : "cursor-pointer border-brand-gold/20 hover:border-brand-gold/50"
-      }`}
-    >
-      <img
-        src={meal.imageUrl || fallbackImage}
-        alt={meal.name}
-        className="h-36 w-full object-cover transition duration-300 group-hover:scale-105"
-      />
-      {selected && (
-        <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-brand-gold">
-          <FontAwesomeIcon icon={faCheckCircle} className="text-sm text-brand-ink" />
-        </div>
-      )}
-      {!meal.isAvailable && (
-        <div className="absolute inset-0 flex items-center justify-center bg-brand-black/70">
-          <span className="rounded-full bg-red-500/90 px-3 py-1 text-xs font-semibold text-white">Fully Booked</span>
-        </div>
-      )}
-      <div className="p-3">
-        <p className="font-semibold leading-snug">{meal.name}</p>
-        {meal.description && (
-          <p className="mt-0.5 text-xs leading-relaxed text-brand-paper/70">{meal.description}</p>
-        )}
-        <p className="mt-1 text-xs text-brand-gold">
-          {meal.availableQuantity - meal.reservedQuantity} remaining
-        </p>
-      </div>
-    </button>
-  );
-}
-
-function CourseSection({
-  course,
-  meals,
-  selectedId,
-  onSelect,
-  disabled,
-  optional,
-}: {
-  course: MealCourse;
-  meals: Array<MealItem & { isAvailable: boolean }>;
-  selectedId: number | null;
-  onSelect: (id: number | null) => void;
-  disabled: boolean;
-  optional: boolean;
-}) {
-  const [open, setOpen] = useState(true);
-  const galleryPool = curatedImages.gallery;
-
-  return (
-    <div className="rounded-2xl border border-brand-gold/20 bg-brand-black/30 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-5 py-4"
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-base font-semibold">{courseLabels[course]}</span>
-          {optional && (
-            <span className="rounded-full border border-brand-gold/30 px-2 py-0.5 text-xs text-brand-gold/70">
-              optional
-            </span>
-          )}
-          {selectedId && (
-            <span className="rounded-full bg-brand-gold/20 px-2 py-0.5 text-xs text-brand-gold">
-              {meals.find((m) => m.id === selectedId)?.name}
-            </span>
-          )}
-        </div>
-        <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} className="text-brand-gold/60 text-sm" />
-      </button>
-
-      {open && (
-        <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3">
-          {meals.length === 0 ? (
-            <p className="text-sm text-brand-paper/60 col-span-full py-2">No {courseLabels[course].toLowerCase()} options available.</p>
-          ) : (
-            meals.map((meal, idx) => (
-              <MealCard
-                key={meal.id}
-                meal={meal}
-                selected={selectedId === meal.id}
-                onSelect={() => onSelect(selectedId === meal.id ? null : meal.id)}
-                disabled={disabled}
-                fallbackImage={galleryPool[idx % galleryPool.length]}
-              />
-            ))
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export function InviteClient({ token }: { token: string }) {
   const redirectUrl = "https://robokorda-africa.com/";
   const currentYear = new Date().getFullYear();
@@ -254,9 +110,6 @@ export function InviteClient({ token }: { token: string }) {
 
   const [rsvpCode, setRsvpCode] = useState("");
   const [status, setStatus] = useState<RSVPStatusType>("ACCEPT");
-  const [starterId, setStarterId] = useState<number | null>(null);
-  const [mainId, setMainId] = useState<number | null>(null);
-  const [dessertId, setDessertId] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const [countdown, setCountdown] = useState("00d 00h 00m 00s");
 
@@ -272,9 +125,6 @@ export function InviteClient({ token }: { token: string }) {
       const payload: InvitePayload = await response.json();
       setData(payload);
       setRsvpCode(payload.guest.rsvpCode);
-      setStarterId(payload.guest.selectedStarterId);
-      setMainId(payload.guest.selectedMainId);
-      setDessertId(payload.guest.selectedDessertId);
       setStatus(payload.guest.rsvpStatus === "PENDING" ? "ACCEPT" : payload.guest.rsvpStatus);
       setLoading(false);
     };
@@ -315,16 +165,6 @@ export function InviteClient({ token }: { token: string }) {
     [data],
   );
 
-  const mealsByCourse = useMemo(() => {
-    const raw = data?.meals ?? [];
-    const withAvail = raw.map((m) => ({ ...m, isAvailable: m.reservedQuantity < m.availableQuantity }));
-    return {
-      STARTER: withAvail.filter((m) => m.course === "STARTER"),
-      MAIN:    withAvail.filter((m) => m.course === "MAIN"),
-      DESSERT: withAvail.filter((m) => m.course === "DESSERT"),
-    };
-  }, [data?.meals]);
-
   const submitRSVP = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -335,9 +175,6 @@ export function InviteClient({ token }: { token: string }) {
         token,
         rsvpCode,
         status,
-        starterId: status === "DECLINE" ? null : starterId,
-        mainId:    status === "DECLINE" ? null : mainId,
-        dessertId: status === "DECLINE" ? null : dessertId,
         notes,
       }),
     });
@@ -366,7 +203,6 @@ export function InviteClient({ token }: { token: string }) {
   }
 
   const isSubmitted = data.guest.rsvpStatus !== "PENDING";
-  const needsMeals = status === "ACCEPT" || status === "MAYBE";
   const firstName = data.guest.fullName.split(" ")[0];
 
   return (
@@ -551,7 +387,7 @@ export function InviteClient({ token }: { token: string }) {
           <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Confirm Attendance</p>
           <h2 className="mb-2 text-3xl font-semibold">RSVP</h2>
           <p className="mb-8 text-brand-paper/70 text-sm">
-            Please confirm your attendance and select your preferences.
+            Please confirm your attendance.
           </p>
 
           {isSubmitted && (
@@ -585,35 +421,6 @@ export function InviteClient({ token }: { token: string }) {
                 </select>
               </div>
             </div>
-
-            {needsMeals && (
-              <>
-                {/* Menu selection per course */}
-                <div>
-                  <p className="mb-3 text-sm font-semibold">
-                    Menu Selection{" "}
-                    <span className="text-xs font-normal text-brand-paper/50">(starter & dessert optional)</span>
-                  </p>
-                  <div className="space-y-4">
-                    {(["STARTER", "MAIN", "DESSERT"] as MealCourse[]).map((course) => (
-                      <CourseSection
-                        key={course}
-                        course={course}
-                        meals={mealsByCourse[course]}
-                        selectedId={course === "STARTER" ? starterId : course === "MAIN" ? mainId : dessertId}
-                        onSelect={(id) => {
-                          if (course === "STARTER") setStarterId(id);
-                          else if (course === "MAIN") setMainId(id);
-                          else setDessertId(id);
-                        }}
-                        disabled={isSubmitted}
-                        optional={course !== "MAIN"}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
 
             {/* Notes */}
             <div>

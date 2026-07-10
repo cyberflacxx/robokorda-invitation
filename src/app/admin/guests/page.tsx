@@ -28,10 +28,6 @@ type Guest = {
   inviteToken: string;
   rsvpCode: string;
   rsvpStatus: RSVPStatusType;
-  selectedStarter?: { name: string } | null;
-  selectedMain?: { name: string } | null;
-  selectedDessert?: { name: string } | null;
-  selectedTable?: { tableName: string } | null;
   rsvp?: { submittedAt: string } | null;
   createdAt: string;
 };
@@ -425,8 +421,6 @@ export default function AdminGuestsPage() {
                 <th className="py-3 pr-4">Contact</th>
                 <th className="py-3 pr-4">Gender</th>
                 <th className="py-3 pr-4">Status</th>
-                <th className="py-3 pr-4">Menu</th>
-                <th className="py-3 pr-4">Table</th>
                 <th className="py-3 pr-4">RSVP Code</th>
                 <th className="py-3 pr-4">Actions</th>
               </tr>
@@ -435,11 +429,6 @@ export default function AdminGuestsPage() {
               {guests.map((guest) => {
                 const { link, message } = buildInviteMessage(guest, baseUrl);
                 const whatsappUrl = buildWhatsAppUrl(guest.phone, message);
-                const menuSummary = [
-                  guest.selectedStarter?.name,
-                  guest.selectedMain?.name,
-                  guest.selectedDessert?.name,
-                ].filter(Boolean).join(" · ") || "—";
 
                 return (
                   <tr key={guest.id} className="border-b border-brand-gold/10 transition hover:bg-brand-paper/5">
@@ -451,8 +440,6 @@ export default function AdminGuestsPage() {
                         {guest.rsvpStatus}
                       </span>
                     </td>
-                    <td className="py-3 pr-4 text-xs text-brand-paper/70 max-w-40 truncate" title={menuSummary}>{menuSummary}</td>
-                    <td className="py-3 pr-4 text-brand-paper/70">{guest.selectedTable?.tableName || "—"}</td>
                     <td className="py-3 pr-4 font-mono text-xs text-brand-gold/80">{guest.rsvpCode}</td>
                     <td className="py-3 pr-4">
                       <div className="flex flex-wrap items-center gap-1.5">

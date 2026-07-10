@@ -6,12 +6,10 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faBowlFood,
   faChartLine,
   faDoorOpen,
   faGear,
   faImage,
-  faTable,
   faUserCheck,
   faUsers,
   faXmark,
@@ -21,8 +19,6 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: faChartLine },
   { href: "/admin/guests", label: "Guests", icon: faUsers },
-  { href: "/admin/meals", label: "Meals", icon: faBowlFood },
-  { href: "/admin/tables", label: "Tables", icon: faTable },
   { href: "/admin/gallery", label: "Gallery", icon: faImage },
   { href: "/admin/checkin", label: "Check-In", icon: faUserCheck },
   { href: "/admin/settings", label: "Settings", icon: faGear },
