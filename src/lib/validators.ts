@@ -16,8 +16,6 @@ const nullableUrl = z.preprocess(
   z.string().url().nullable().optional(),
 );
 
-const mealCourseSchema = z.enum(["STARTER", "MAIN", "DESSERT"]);
-
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
@@ -48,23 +46,6 @@ export const rsvpSchema = z.object({
   rsvpCode: z.string().min(4),
   status: z.nativeEnum(RSVPStatus),
   notes: z.string().max(500).optional().nullable(),
-});
-
-export const mealSchema = z.object({
-  name: z.string().min(2),
-  description: z.string().optional().nullable(),
-  course: mealCourseSchema.default("MAIN"),
-  category: z.string().optional().nullable(),
-  imageUrl: nullableUrl,
-  availableQuantity: z.number().int().positive(),
-  isActive: z.boolean().default(true),
-});
-
-export const tableSchema = z.object({
-  tableName: z.string().min(2),
-  capacity: z.number().int().positive(),
-  locationNote: z.string().optional().nullable(),
-  isActive: z.boolean().default(true),
 });
 
 export const gallerySchema = z.object({

@@ -20,8 +20,6 @@ const statCards = [
   { key: "declined", label: "Declined" },
   { key: "maybe", label: "Maybe" },
   { key: "pending", label: "Pending" },
-  { key: "reservedTables", label: "Reserved Seats" },
-  { key: "reservedMeals", label: "Reserved Meals" },
   { key: "checkedIn", label: "Checked-In" },
 ] as const;
 
@@ -81,7 +79,7 @@ export default function AdminDashboardPage() {
             <p className="text-xs uppercase tracking-[0.25em] text-brand-gold/85">Executive Panel</p>
             <h2 className="mt-2 text-2xl font-semibold">Real-time invitation operations</h2>
             <p className="mt-2 text-sm text-brand-paper/85">
-              Built with live refresh, charted RSVP performance, and reservation visibility.
+              Built with live refresh and charted RSVP performance.
             </p>
           </div>
           <img
@@ -156,14 +154,14 @@ export default function AdminDashboardPage() {
               <h2 className="mb-3 text-lg font-semibold">Operational Metrics</h2>
               <Bar
                 data={{
-                  labels: ["Reserved Seats", "Reserved Meals", "Checked-In", "Total Invited"],
+                  labels: ["Checked-In", "Accepted", "Pending", "Total Invited"],
                   datasets: [
                     {
                       label: "Count",
                       data: [
-                        stats.reservedTables,
-                        stats.reservedMeals,
                         stats.checkedIn,
+                        stats.accepted,
+                        stats.pending,
                         stats.totalInvited,
                       ],
                       backgroundColor: [

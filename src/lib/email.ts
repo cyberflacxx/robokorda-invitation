@@ -78,7 +78,7 @@ function htmlTemplate(params: InvitationEmailParams): string {
               </table>
 
               <p style="margin:0 0 24px;color:#4a5568;font-size:15px;line-height:1.7;">
-                Use this code when you open your invitation to confirm your attendance and choose your preferred meal for each course (starter, main, and dessert).
+                Use this code when you open your invitation to confirm your attendance.
               </p>
 
               <p style="margin:0 0 24px;color:#4a5568;font-size:15px;line-height:1.7;">

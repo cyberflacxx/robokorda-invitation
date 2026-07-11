@@ -46,10 +46,6 @@ export async function POST(request: Request) {
           where: { id: guest.id },
           data: {
             rsvpStatus: payload.status,
-            selectedStarterId: null,
-            selectedMainId: null,
-            selectedDessertId: null,
-            selectedTableId: null,
           },
         });
 

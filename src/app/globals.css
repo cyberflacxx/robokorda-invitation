@@ -70,9 +70,6 @@ p {
     @apply mx-auto max-w-6xl px-4 sm:px-6;
   }
 
-  .meal-fill-bar {
-    width: var(--meal-fill, 0%);
-  }
 }
 
 .navbar-action-btn {

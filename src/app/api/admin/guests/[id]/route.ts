@@ -48,28 +48,7 @@ export async function DELETE(
   }
 
   try {
-    await prisma.$transaction(async (tx) => {
-      const guest = await tx.guest.findUnique({ where: { id: guestId } });
-      if (!guest) throw new Error("Guest not found");
-
-      for (const mealId of [guest.selectedStarterId, guest.selectedMainId, guest.selectedDessertId]) {
-        if (mealId) {
-          await tx.meal.update({
-            where: { id: mealId },
-            data: { reservedQuantity: { decrement: 1 } },
-          });
-        }
-      }
-
-      if (guest.selectedTableId) {
-        await tx.eventTable.update({
-          where: { id: guest.selectedTableId },
-          data: { reservedSeats: { decrement: 1 } },
-        });
-      }
-
-      await tx.guest.delete({ where: { id: guestId } });
-    });
+    await prisma.guest.delete({ where: { id: guestId } });
 
     return NextResponse.json({ success: true });
   } catch (error) {

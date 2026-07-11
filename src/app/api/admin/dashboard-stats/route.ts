@@ -16,8 +16,6 @@ export async function GET() {
       declined,
       maybe,
       pending,
-      reservedTables,
-      reservedMeals,
       checkedIn,
     ] = await Promise.all([
       prisma.guest.count(),
@@ -25,8 +23,6 @@ export async function GET() {
       prisma.guest.count({ where: { rsvpStatus: RSVPStatus.DECLINE } }),
       prisma.guest.count({ where: { rsvpStatus: RSVPStatus.MAYBE } }),
       prisma.guest.count({ where: { rsvpStatus: RSVPStatus.PENDING } }),
-      prisma.eventTable.aggregate({ _sum: { reservedSeats: true } }),
-      prisma.meal.aggregate({ _sum: { reservedQuantity: true } }),
       prisma.guest.count({ where: { isCheckedIn: true } }),
     ]);
 
@@ -36,8 +32,6 @@ export async function GET() {
       declined,
       maybe,
       pending,
-      reservedTables: reservedTables._sum.reservedSeats ?? 0,
-      reservedMeals: reservedMeals._sum.reservedQuantity ?? 0,
       checkedIn,
     });
   } catch {
@@ -47,8 +41,6 @@ export async function GET() {
       declined: 0,
       maybe: 0,
       pending: 0,
-      reservedTables: 0,
-      reservedMeals: 0,
       checkedIn: 0,
       degraded: true,
     });
