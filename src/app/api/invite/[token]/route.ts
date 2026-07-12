@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 function getSampleGuestPayload(token: string) {
-  const sampleGuests: Record<string, { fullName: string; rsvpCode: string }> = {
-    "sample-dambu-token": { fullName: "Dambu", rsvpCode: "RBK10-1001" },
-    "sample-maita-token": { fullName: "Maita", rsvpCode: "RBK10-1002" },
+  const sampleGuests: Record<string, { fullName: string }> = {
+    "sample-dambu-token": { fullName: "Dambu" },
+    "sample-maita-token": { fullName: "Maita" },
   };
 
   const sample = sampleGuests[token];
@@ -15,13 +15,12 @@ function getSampleGuestPayload(token: string) {
       id: 0,
       fullName: sample.fullName,
       inviteToken: token,
-      rsvpCode: sample.rsvpCode,
       rsvpStatus: "PENDING",
     },
     settings: {
       eventName: "Robokorda 10th Anniversary",
       eventDate: "2026-09-13T00:00:00.000Z",
-      eventTime: "18:00",
+      eventTime: "17:00",
       venueName: "Manna Safari Lodge",
       venueAddress: "Harare Zimbabwe",
       dressCode: "Formal / Corporate Elegant",
@@ -57,7 +56,16 @@ export async function GET(
       prisma.galleryImage.findMany({ orderBy: { createdAt: "desc" } }),
     ]);
 
-    return NextResponse.json({ guest, settings, gallery });
+    return NextResponse.json({
+      guest: {
+        id: guest.id,
+        fullName: guest.fullName,
+        inviteToken: guest.inviteToken,
+        rsvpStatus: guest.rsvpStatus,
+      },
+      settings,
+      gallery,
+    });
   } catch {
     const samplePayload = getSampleGuestPayload(token);
     if (samplePayload) return NextResponse.json(samplePayload);

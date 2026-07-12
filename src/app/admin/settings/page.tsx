@@ -20,7 +20,7 @@ type Settings = {
 const defaults: Settings = {
   eventName: "Robokorda 10th Anniversary",
   eventDate: "2026-09-13",
-  eventTime: "18:00",
+  eventTime: "17:00",
   venueName: "Manna Safari Lodge",
   venueAddress: "Harare Zimbabwe",
   dressCode: "Formal / Corporate Elegant",

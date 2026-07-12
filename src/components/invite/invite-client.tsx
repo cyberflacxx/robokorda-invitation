@@ -19,7 +19,6 @@ type InvitePayload = {
     id: number;
     fullName: string;
     inviteToken: string;
-    rsvpCode: string;
     rsvpStatus: RSVPStatusType;
   };
   settings: {
@@ -73,9 +72,9 @@ const curatedImages = {
 };
 
 const scheduleItems = [
-  { time: "18:00", title: "Guest Arrival & Networking", image: curatedImages.venue[0] },
+  { time: "17:00", title: "Guest Arrival & Networking", image: curatedImages.venue[0] },
   { time: "18:45", title: "Opening Remarks", image: curatedImages.venue[1] },
-  { time: "19:30", title: "Dinner Service", image: curatedImages.venue[2] },
+  { time: "19:30", title: "Anniversary Presentation", image: curatedImages.venue[2] },
   { time: "20:30", title: "Innovation Highlights", image: curatedImages.gallery[0] },
   { time: "21:15", title: "Celebration Toast", image: curatedImages.gallery[1] },
   { time: "22:00", title: "Closing Session", image: curatedImages.gallery[3] },
@@ -128,7 +127,7 @@ export function InviteClient({ token }: { token: string }) {
 
   useEffect(() => {
     if (!data?.settings?.eventDate) return;
-    const target = new Date(`${data.settings.eventDate.split("T")[0]}T${data.settings.eventTime || "18:00"}:00`);
+    const target = new Date(`${data.settings.eventDate.split("T")[0]}T${data.settings.eventTime || "17:00"}:00`);
     const tick = () => {
       const diff = target.getTime() - Date.now();
       if (diff <= 0) {
@@ -262,7 +261,7 @@ export function InviteClient({ token }: { token: string }) {
           <div className="row g-3">
             {[
               { icon: faCalendarDays, label: "Date", value: new Date(data.settings?.eventDate ?? "2026-09-13").toDateString() },
-              { icon: faClock, label: "Time", value: data.settings?.eventTime ?? "18:00" },
+              { icon: faClock, label: "Time", value: data.settings?.eventTime ?? "17:00" },
               { icon: faLocationDot, label: "Venue", value: data.settings?.venueName ?? "Manna Safari Lodge", sub: data.settings?.venueAddress ?? "Harare Zimbabwe" },
             ].map(({ icon, label, value, sub }) => (
               <div key={label} className="col-12 col-md-6 col-lg-4">

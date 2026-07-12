@@ -21,7 +21,7 @@ async function main() {
     update: {
       eventName: "Robokorda 10th Anniversary",
       eventDate: new Date("2026-09-13T00:00:00.000Z"),
-      eventTime: "18:00",
+      eventTime: "17:00",
       venueName: "Manna Safari Lodge",
       venueAddress: "Harare Zimbabwe",
       dressCode: "Formal / Corporate Elegant",
@@ -33,7 +33,7 @@ async function main() {
     create: {
       eventName: "Robokorda 10th Anniversary",
       eventDate: new Date("2026-09-13T00:00:00.000Z"),
-      eventTime: "18:00",
+      eventTime: "17:00",
       venueName: "Manna Safari Lodge",
       venueAddress: "Harare Zimbabwe",
       dressCode: "Formal / Corporate Elegant",

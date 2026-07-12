@@ -7,14 +7,9 @@ Full-stack private invitation platform built with Next.js, TypeScript, Tailwind 
 ### Guest Experience
 - Personalized invitation route: `/invite/[token]`
 - Guest greeting by name
-- RSVP code verification
-- RSVP status: Accept / Decline / Maybe
-- Gender selection: Male / Female / Prefer not to say
-- Meal selection with quantity limits
-- Table selection with capacity limits
-- Overbooking prevention with transactional RSVP submission
+- RSVP status: Confirm / Decline
+- Optional RSVP note
 - Event sections: Hero, Countdown, Schedule, Venue, RSVP, Gallery, FAQ, Footer
-- Dark/light mode toggle persisted in localStorage
 
 ### Admin Experience
 - Secure admin auth at `/admin/login`
@@ -60,10 +55,6 @@ src/
       admin/dashboard-stats
       admin/guests
       admin/guests/[id]
-      admin/meals
-      admin/meals/[id]
-      admin/tables
-      admin/tables/[id]
       admin/gallery
       admin/gallery/[id]
       admin/settings
@@ -72,8 +63,6 @@ src/
     admin/login
     admin/dashboard
     admin/guests
-    admin/meals
-    admin/tables
     admin/gallery
     admin/settings
     admin/checkin
@@ -134,21 +123,9 @@ npm run dev
 ## Seeded Event Data
 
 - Event: Robokorda 10th Anniversary
-- Date: 2026-12-12
-- Time: 18:00
-- Venue: Robokorda Innovation Centre, Harare, Zimbabwe
-- Meals:
-  - Beef Dinner
-  - Chicken Dinner
-  - Vegetarian Plate
-  - Vegan Plate
-  - Dessert Box
-- Tables:
-  - Table 1
-  - Table 2
-  - Table 3
-  - VIP Table
-  - Sponsors Table
+- Date: 2026-09-13
+- Time: 17:00
+- Venue: Manna Safari Lodge, Harare Zimbabwe
 
 ## Important Security Notes
 
@@ -156,4 +133,3 @@ npm run dev
 - Public invite URLs use `inviteToken`, not guest IDs.
 - Passwords are stored as bcrypt hashes.
 - RSVP submission rejects duplicate submissions.
-- Meal and table reservations are capacity-checked in a DB transaction.
