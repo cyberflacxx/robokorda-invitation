@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://robokorda-invitation-one.vercel.app";
+const DEFAULT_SITE_URL = "https://robokorda-invitation.vercel.app";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.trim()
