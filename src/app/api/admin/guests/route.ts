@@ -117,7 +117,6 @@ export async function POST(request: Request) {
           to: guest.email,
           guestName: guest.fullName,
           eventName: settings?.eventName ?? "Our Special Event",
-          rsvpCode: guest.rsvpCode,
           inviteLink,
           eventDate: settings?.eventDate?.toISOString(),
           venueName: settings?.venueName,

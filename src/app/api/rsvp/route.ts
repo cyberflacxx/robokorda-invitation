@@ -1,4 +1,4 @@
-import { Prisma, RSVPStatus } from "@prisma/client";
+import { Gender, Prisma, RSVPStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { rsvpSchema } from "@/lib/validators";
@@ -21,23 +21,25 @@ export async function POST(request: Request) {
           include: { rsvp: true },
         });
 
-        if (!guest || guest.rsvpCode !== payload.rsvpCode) {
-          throw new Error("Invalid invitation token or RSVP code");
+        if (!guest) {
+          throw new Error("Invalid invitation token");
+        }
+
+        if (payload.rsvpCode && guest.rsvpCode !== payload.rsvpCode) {
+          throw new Error("Invalid RSVP code");
         }
 
         if (guest.rsvp || guest.rsvpStatus !== RSVPStatus.PENDING) {
           throw new Error("RSVP has already been submitted");
         }
 
-        if (!guest.gender) {
-          throw new Error("Guest profile is missing gender. Please contact the host.");
-        }
+        const status = payload.status ?? RSVPStatus.ACCEPT;
 
         const rsvp = await tx.rSVP.create({
           data: {
             guestId: guest.id,
-            status: payload.status,
-            gender: guest.gender,
+            status,
+            gender: guest.gender ?? Gender.PREFER_NOT_TO_SAY,
             notes: payload.notes ?? null,
           },
         });
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
         await tx.guest.update({
           where: { id: guest.id },
           data: {
-            rsvpStatus: payload.status,
+            rsvpStatus: status,
           },
         });
 
@@ -59,8 +61,7 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : "Failed to submit RSVP";
     const status =
       message.includes("already") ||
-      message.includes("Invalid") ||
-      message.includes("missing gender")
+      message.includes("Invalid")
         ? 400
         : 500;
     return NextResponse.json({ error: message }, { status });

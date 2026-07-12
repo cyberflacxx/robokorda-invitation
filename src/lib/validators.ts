@@ -43,8 +43,8 @@ export const guestUpdateSchema = guestSchema.partial();
 
 export const rsvpSchema = z.object({
   token: z.string().min(8),
-  rsvpCode: z.string().min(4),
-  status: z.nativeEnum(RSVPStatus),
+  rsvpCode: z.string().min(4).optional(),
+  status: z.nativeEnum(RSVPStatus).optional(),
   notes: z.string().max(500).optional().nullable(),
 });
 

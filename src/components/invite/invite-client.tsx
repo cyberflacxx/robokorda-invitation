@@ -6,13 +6,13 @@ import { faFacebookF, faInstagram, faTiktok } from "@fortawesome/free-brands-svg
 import {
   faCalendarDays,
   faCheckCircle,
+  faChevronDown,
   faClock,
   faLocationDot,
   faPhone,
-  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
-import { RSVP_STATUSES, type RSVPStatusType } from "@/lib/enums";
+import { type RSVPStatusType } from "@/lib/enums";
 
 type InvitePayload = {
   guest: {
@@ -74,11 +74,11 @@ const curatedImages = {
 
 const scheduleItems = [
   { time: "18:00", title: "Guest Arrival & Networking", image: curatedImages.venue[0] },
-  { time: "18:45", title: "Opening Remarks",             image: curatedImages.venue[1] },
-  { time: "19:30", title: "Dinner Service",              image: curatedImages.venue[2] },
-  { time: "20:30", title: "Innovation Highlights",       image: curatedImages.gallery[0] },
-  { time: "21:15", title: "Celebration Toast",           image: curatedImages.gallery[1] },
-  { time: "22:00", title: "Closing Session",             image: curatedImages.gallery[3] },
+  { time: "18:45", title: "Opening Remarks", image: curatedImages.venue[1] },
+  { time: "19:30", title: "Dinner Service", image: curatedImages.venue[2] },
+  { time: "20:30", title: "Innovation Highlights", image: curatedImages.gallery[0] },
+  { time: "21:15", title: "Celebration Toast", image: curatedImages.gallery[1] },
+  { time: "22:00", title: "Closing Session", image: curatedImages.gallery[3] },
 ];
 
 const dressGuides = {
@@ -101,15 +101,11 @@ const dressGuides = {
 };
 
 export function InviteClient({ token }: { token: string }) {
-  const redirectUrl = "https://robokorda-africa.com/";
   const currentYear = new Date().getFullYear();
   const [data, setData] = useState<InvitePayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  const [rsvpCode, setRsvpCode] = useState("");
-  const [status, setStatus] = useState<RSVPStatusType>("ACCEPT");
   const [notes, setNotes] = useState("");
   const [countdown, setCountdown] = useState("00d 00h 00m 00s");
 
@@ -124,8 +120,6 @@ export function InviteClient({ token }: { token: string }) {
       }
       const payload: InvitePayload = await response.json();
       setData(payload);
-      setRsvpCode(payload.guest.rsvpCode);
-      setStatus(payload.guest.rsvpStatus === "PENDING" ? "ACCEPT" : payload.guest.rsvpStatus);
       setLoading(false);
     };
 
@@ -137,7 +131,10 @@ export function InviteClient({ token }: { token: string }) {
     const target = new Date(`${data.settings.eventDate.split("T")[0]}T${data.settings.eventTime || "18:00"}:00`);
     const tick = () => {
       const diff = target.getTime() - Date.now();
-      if (diff <= 0) { setCountdown("Event is happening!"); return; }
+      if (diff <= 0) {
+        setCountdown("Event is happening!");
+        return;
+      }
       const d = Math.floor(diff / 86400000);
       const h = Math.floor((diff / 3600000) % 24);
       const m = Math.floor((diff / 60000) % 60);
@@ -149,31 +146,18 @@ export function InviteClient({ token }: { token: string }) {
     return () => clearInterval(timer);
   }, [data?.settings?.eventDate, data?.settings?.eventTime]);
 
-  useEffect(() => {
-    if (!data || loading || error || data.guest.rsvpStatus === "PENDING") return;
-
-    // Redirect guests to the main RoboKorda Africa website after viewing the invitation.
-    const timer = window.setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 5000);
-
-    return () => window.clearTimeout(timer);
-  }, [data, error, loading, redirectUrl]);
-
   const heroImage = useMemo(
     () => data?.gallery.find((img) => img.isHero)?.imageUrl || data?.settings?.heroImageUrl || curatedImages.hero,
     [data],
   );
 
-  const submitRSVP = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitRSVP = async (status: RSVPStatusType) => {
     setSubmitting(true);
     const response = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token,
-        rsvpCode,
         status,
         notes,
       }),
@@ -184,9 +168,9 @@ export function InviteClient({ token }: { token: string }) {
       setSubmitting(false);
       return;
     }
-    toast.success("RSVP submitted! We look forward to seeing you.");
+    toast.success(status === "DECLINE" ? "RSVP updated." : "RSVP confirmed.");
     setSubmitting(false);
-    setData((cur) => cur ? { ...cur, guest: { ...cur.guest, rsvpStatus: status } } : cur);
+    setData((current) => current ? { ...current, guest: { ...current.guest, rsvpStatus: status } } : current);
   };
 
   if (loading) return <div className="min-h-screen bg-brand-ink" />;
@@ -195,7 +179,7 @@ export function InviteClient({ token }: { token: string }) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-brand-ink">
         <div className="text-center">
-          <p className="text-4xl mb-4">Invitation</p>
+          <p className="mb-4 text-4xl">Invitation</p>
           <p className="text-lg text-red-300">{error || "Invitation not found"}</p>
         </div>
       </div>
@@ -207,8 +191,6 @@ export function InviteClient({ token }: { token: string }) {
 
   return (
     <div className="bg-brand-ink text-brand-paper">
-
-      {/* Sticky nav */}
       <header
         className="fixed top-0 z-30 w-full"
         style={{
@@ -245,7 +227,6 @@ export function InviteClient({ token }: { token: string }) {
         </div>
       </header>
 
-      {/* Hero */}
       <section
         id="hero"
         className="relative flex min-h-screen items-end pt-16"
@@ -259,23 +240,23 @@ export function InviteClient({ token }: { token: string }) {
             {data.settings?.eventName ?? "Robokorda 10th Anniversary"}
           </h1>
           <p className="mt-5 text-xl text-brand-paper/85">
-            Hi <span className="text-brand-gold font-semibold">{firstName}</span>, your invitation awaits.
+            Hi <span className="font-semibold text-brand-gold">{firstName}</span>, your invitation awaits.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-brand-gold animate-pulse" />
+              <span className="h-2 w-2 animate-pulse rounded-full bg-brand-gold" />
               {countdown}
             </div>
             <a
               href="#rsvp"
               className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-2.5 text-sm font-semibold text-brand-ink transition hover:brightness-110"
             >
-              Confirm Attendance</a>
+              Confirm Attendance
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Quick info */}
       <section className="bg-brand-black/60 py-10 backdrop-blur">
         <div className="container">
           <div className="row g-3">
@@ -286,11 +267,11 @@ export function InviteClient({ token }: { token: string }) {
             ].map(({ icon, label, value, sub }) => (
               <div key={label} className="col-12 col-md-6 col-lg-4">
                 <div className="d-flex align-items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-                  <FontAwesomeIcon icon={icon} className="mt-1 text-brand-gold text-lg" />
+                  <FontAwesomeIcon icon={icon} className="mt-1 text-lg text-brand-gold" />
                   <div>
                     <p className="text-xs uppercase tracking-widest text-brand-paper/50">{label}</p>
                     <p className="mt-1 font-semibold">{value}</p>
-                    {sub && <p className="text-xs text-brand-paper/60 mt-0.5">{sub}</p>}
+                    {sub && <p className="mt-0.5 text-xs text-brand-paper/60">{sub}</p>}
                   </div>
                 </div>
               </div>
@@ -299,7 +280,6 @@ export function InviteClient({ token }: { token: string }) {
         </div>
       </section>
 
-      {/* Schedule */}
       <section id="schedule" className="py-16">
         <div className="container">
           <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Programme</p>
@@ -321,33 +301,31 @@ export function InviteClient({ token }: { token: string }) {
         </div>
       </section>
 
-      {/* Venue */}
       <section id="venue" className="bg-brand-black/40 py-16">
         <div className="container">
           <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Location</p>
           <h2 className="mb-8 text-3xl font-semibold">Venue</h2>
           <div className="row g-4">
             <div className="col-12 col-lg-6">
-              <img src={curatedImages.venue[2]} alt="Venue" className="h-64 w-full rounded-2xl object-cover border border-white/10" />
+              <img src={curatedImages.venue[2]} alt="Venue" className="h-64 w-full rounded-2xl border border-white/10 object-cover" />
               <p className="mt-4 text-lg font-semibold">{data.settings?.venueName ?? "Manna Safari Lodge"}</p>
               <p className="mt-1 text-sm text-brand-paper/70">{data.settings?.venueAddress ?? "Harare Zimbabwe"}</p>
             </div>
             <div className="col-12 col-lg-6">
               <div className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <p className="text-xs uppercase tracking-widest text-brand-gold mb-3">Event Details</p>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-brand-paper/60">Dress Code</span><span>{data.settings?.dressCode || "Formal"}</span></div>
-                  <div className="flex justify-between"><span className="text-brand-paper/60">Theme</span><span>{data.settings?.theme || "-"}</span></div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="mb-3 text-xs uppercase tracking-widest text-brand-gold">Event Details</p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between"><span className="text-brand-paper/60">Dress Code</span><span>{data.settings?.dressCode || "Formal"}</span></div>
+                    <div className="flex justify-between"><span className="text-brand-paper/60">Theme</span><span>{data.settings?.theme || "-"}</span></div>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Dress code */}
       <section id="dress-code" className="py-16">
         <div className="container">
           <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Attire</p>
@@ -355,7 +333,7 @@ export function InviteClient({ token }: { token: string }) {
           <div className="row g-4">
             {[dressGuides.ladies, dressGuides.males].map((guide) => (
               <div key={guide.title} className="col-12 col-lg-6">
-                <article className="h-100 rounded-2xl border border-white/10 bg-brand-black/40 overflow-hidden">
+                <article className="h-100 overflow-hidden rounded-2xl border border-white/10 bg-brand-black/40">
                   <div className="row g-0">
                     {guide.samples.map((src, i) => (
                       <div key={i} className="col-6">
@@ -380,95 +358,91 @@ export function InviteClient({ token }: { token: string }) {
         </div>
       </section>
 
-      {/* RSVP */}
       <section id="rsvp" className="bg-brand-black/50 py-16">
         <div className="container">
           <div className="mx-auto" style={{ maxWidth: "980px" }}>
-          <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Confirm Attendance</p>
-          <h2 className="mb-2 text-3xl font-semibold">RSVP</h2>
-          <p className="mb-8 text-brand-paper/70 text-sm">
-            Please confirm your attendance.
-          </p>
+            <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Confirm Attendance</p>
+            <h2 className="mb-2 text-3xl font-semibold">RSVP</h2>
+            <p className="mb-8 text-sm text-brand-paper/70">
+              Confirm your attendance using your private invitation link.
+            </p>
 
-          {isSubmitted && (
-            <div className="mb-6 flex items-center gap-3 rounded-xl border border-green-400/40 bg-green-500/10 px-4 py-3 text-green-200 text-sm">
-              <FontAwesomeIcon icon={faCheckCircle} className="text-green-400" />
-              Your RSVP has been submitted - status: <strong>{data.guest.rsvpStatus}</strong>
-            </div>
-          )}
+            {isSubmitted && (
+              <div className="mb-6 flex items-center gap-3 rounded-xl border border-green-400/40 bg-green-500/10 px-4 py-3 text-sm text-green-200">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-green-400" />
+                {data.guest.rsvpStatus === "ACCEPT" ? "RSVP Confirmed" : `RSVP ${data.guest.rsvpStatus}`}
+              </div>
+            )}
 
-          <form onSubmit={submitRSVP} className="space-y-6">
-            {/* Code + response */}
-            <div className="row g-3">
-              <div className="col-12 col-md-6">
-                <label htmlFor="rsvp-code" className="mb-1.5 block text-xs uppercase tracking-wider text-brand-paper/60">RSVP Code</label>
-                <input
-                  id="rsvp-code"
-                  value={rsvpCode}
-                  onChange={(e) => setRsvpCode(e.target.value)}
-                  className="input"
-                  placeholder="Your RSVP code"
-                  required
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submitRSVP("ACCEPT");
+              }}
+              className="space-y-6"
+            >
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+                <p className="text-xs uppercase tracking-wider text-brand-paper/60">Guest</p>
+                <p className="mt-1 font-semibold">{data.guest.fullName}</p>
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs uppercase tracking-wider text-brand-paper/60">Message (optional)</label>
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={3}
+                  className="input resize-none"
+                  placeholder="Add a short note for the host"
                   disabled={isSubmitted}
                 />
               </div>
-              <div className="col-12 col-md-6">
-                <label htmlFor="rsvp-status" className="mb-1.5 block text-xs uppercase tracking-wider text-brand-paper/60">Response</label>
-                <select id="rsvp-status" title="RSVP Response" value={status} onChange={(e) => setStatus(e.target.value as RSVPStatusType)} className="input" disabled={isSubmitted}>
-                  <option value={RSVP_STATUSES[1]}>Accept</option>
-                  <option value={RSVP_STATUSES[2]}>Decline</option>
-                  <option value={RSVP_STATUSES[3]}>Maybe</option>
-                </select>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="submit"
+                  disabled={submitting || isSubmitted}
+                  className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {submitting ? "Submitting..." : isSubmitted ? "RSVP Confirmed" : "Confirm Attendance"}
+                </button>
+                {!isSubmitted && (
+                  <button
+                    type="button"
+                    onClick={() => void submitRSVP("DECLINE")}
+                    disabled={submitting}
+                    className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Decline Invitation
+                  </button>
+                )}
               </div>
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-wider text-brand-paper/60">Notes (optional)</label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                rows={3}
-                className="input resize-none"
-                placeholder="Dietary requirements, allergies, or anything else we should know"
-                disabled={isSubmitted}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting || isSubmitted}
-              className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {submitting ? "Submitting..." : isSubmitted ? "RSVP Submitted" : "Confirm RSVP"}
-            </button>
-          </form>
+            </form>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
       <section id="faq" className="bg-brand-black/40 py-16">
         <div className="container">
           <div className="mx-auto" style={{ maxWidth: "900px" }}>
-          <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Questions</p>
-          <h2 className="mb-8 text-3xl font-semibold">FAQ</h2>
-          <div className="space-y-3">
-            {[
-              ["Can I update my RSVP?", "Please contact the host if your availability changes after submission."],
-              ["Can I bring a plus one?", "This event is by personalised invitation only."],
-              ["Is parking available?", "Yes, dedicated guest parking is available at the venue."],
-              ["What if I have dietary restrictions?", "Please note any requirements in the RSVP notes field."],
-            ].map(([q, a]) => (
-              <details key={q} className="group rounded-2xl border border-white/10 bg-brand-black/30 p-5">
-                <summary className="cursor-pointer list-none font-semibold text-sm flex items-center justify-between">
-                  {q}
-                  <FontAwesomeIcon icon={faChevronDown} className="text-brand-gold/60 text-xs transition group-open:rotate-180" />
-                </summary>
-                <p className="mt-3 text-sm text-brand-paper/70 leading-relaxed">{a}</p>
-              </details>
-            ))}
-          </div>
+            <p className="mb-2 text-xs uppercase tracking-[0.35em] text-brand-gold">Questions</p>
+            <h2 className="mb-8 text-3xl font-semibold">FAQ</h2>
+            <div className="space-y-3">
+              {[
+                ["Can I update my RSVP?", "Please contact the host if your availability changes after submission."],
+                ["Can I bring a plus one?", "This event is by personalised invitation only."],
+                ["Is parking available?", "Yes, dedicated guest parking is available at the venue."],
+                ["Can I leave a message with my RSVP?", "Yes, you can add a short note in the RSVP message field."],
+              ].map(([q, a]) => (
+                <details key={q} className="group rounded-2xl border border-white/10 bg-brand-black/30 p-5">
+                  <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold">
+                    {q}
+                    <FontAwesomeIcon icon={faChevronDown} className="text-xs text-brand-gold/60 transition group-open:rotate-180" />
+                  </summary>
+                  <p className="mt-3 leading-relaxed text-sm text-brand-paper/70">{a}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>

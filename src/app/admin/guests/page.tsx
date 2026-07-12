@@ -58,7 +58,7 @@ function normalizeWhatsAppNumber(phone: string | null | undefined) {
 
 function buildInviteMessage(guest: Pick<Guest, "fullName" | "rsvpCode" | "inviteToken">, baseUrl: string) {
   const link = `${baseUrl}/invite/${guest.inviteToken}`;
-  const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event here. Venue: Manna Safari Lodge, Harare Zimbabwe. RSVP code is ${guest.rsvpCode}. Looking forward to seeing you.\n${link}`;
+  const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event here. Venue: Manna Safari Lodge, Harare Zimbabwe. Confirm your attendance here:\n${link}`;
   return { link, message };
 }
 
@@ -125,11 +125,7 @@ export default function AdminGuestsPage() {
       toast.error(body?.error || "Failed to create guest");
       return;
     }
-    const generatedCode = body?.guest?.rsvpCode;
     toast.success(form.email ? "Guest created & invitation email sent" : "Guest created");
-    if (generatedCode) {
-      toast.success(`Reservation code generated: ${generatedCode}`);
-    }
     if (body?.guest?.phone) {
       toast("Use the WhatsApp button on the guest row if you want to send the link there.");
     }
