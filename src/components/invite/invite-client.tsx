@@ -100,6 +100,7 @@ const dressGuides = {
 };
 
 export function InviteClient({ token }: { token: string }) {
+  const redirectUrl = "https://robokorda-africa.com";
   const currentYear = new Date().getFullYear();
   const [data, setData] = useState<InvitePayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -107,6 +108,7 @@ export function InviteClient({ token }: { token: string }) {
   const [submitting, setSubmitting] = useState(false);
   const [notes, setNotes] = useState("");
   const [countdown, setCountdown] = useState("00d 00h 00m 00s");
+  const [shouldRedirectAfterSuccess, setShouldRedirectAfterSuccess] = useState(false);
 
   useEffect(() => {
     const fetchInvite = async () => {
@@ -145,6 +147,17 @@ export function InviteClient({ token }: { token: string }) {
     return () => clearInterval(timer);
   }, [data?.settings?.eventDate, data?.settings?.eventTime]);
 
+  useEffect(() => {
+    if (!shouldRedirectAfterSuccess) return;
+
+    // Redirect confirmed guests to the main Robokorda Africa website after RSVP success.
+    const timer = window.setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 4000);
+
+    return () => window.clearTimeout(timer);
+  }, [redirectUrl, shouldRedirectAfterSuccess]);
+
   const heroImage = useMemo(
     () => data?.gallery.find((img) => img.isHero)?.imageUrl || data?.settings?.heroImageUrl || curatedImages.hero,
     [data],
@@ -170,6 +183,7 @@ export function InviteClient({ token }: { token: string }) {
     toast.success(status === "DECLINE" ? "RSVP updated." : "RSVP confirmed.");
     setSubmitting(false);
     setData((current) => current ? { ...current, guest: { ...current.guest, rsvpStatus: status } } : current);
+    setShouldRedirectAfterSuccess(status === "ACCEPT");
   };
 
   if (loading) return <div className="min-h-screen bg-brand-ink" />;
