@@ -5,7 +5,7 @@ import { requireAdmin } from "@/lib/require-admin";
 import { makeInviteToken, makeRsvpCode } from "@/lib/server-utils";
 import { guestCreateSchema } from "@/lib/validators";
 import { sendInvitationEmail } from "@/lib/email";
-import { getBaseUrl } from "@/lib/utils";
+import { buildInviteUrl } from "@/lib/site";
 
 type ImportGuest = {
   fullName?: string;
@@ -110,7 +110,7 @@ export async function POST(request: Request) {
     // Auto-send invitation email if guest has an email address
     if (guest.email) {
       const settings = await prisma.eventSetting.findFirst({ orderBy: { id: "asc" } });
-      const inviteLink = `${getBaseUrl()}/invite/${guest.inviteToken}`;
+      const inviteLink = buildInviteUrl(guest.inviteToken);
 
       try {
         await sendInvitationEmail({

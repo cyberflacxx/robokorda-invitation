@@ -1,7 +1,7 @@
 "use client";
 
 import Papa from "papaparse";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,7 +17,7 @@ import {
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { GENDERS, type GenderType, type RSVPStatusType } from "@/lib/enums";
-import { getBaseUrl } from "@/lib/utils";
+import { buildInviteUrl } from "@/lib/site";
 
 type Guest = {
   id: number;
@@ -56,8 +56,8 @@ function normalizeWhatsAppNumber(phone: string | null | undefined) {
   return digits;
 }
 
-function buildInviteMessage(guest: Pick<Guest, "fullName" | "rsvpCode" | "inviteToken">, baseUrl: string) {
-  const link = `${baseUrl}/invite/${guest.inviteToken}`;
+function buildInviteMessage(guest: Pick<Guest, "fullName" | "rsvpCode" | "inviteToken">) {
+  const link = buildInviteUrl(guest.inviteToken);
   const message = `Hi ${guest.fullName}!\nI hope that you're well. Please find details about the event here. Venue: Manna Safari Lodge, Harare Zimbabwe. Confirm your attendance here:\n${link}`;
   return { link, message };
 }
@@ -207,10 +207,8 @@ export default function AdminGuestsPage() {
     });
   };
 
-  const baseUrl = useMemo(() => getBaseUrl(), []);
-
   const copyMessage = async (guest: Guest) => {
-    const { message } = buildInviteMessage(guest, baseUrl);
+    const { message } = buildInviteMessage(guest);
     await navigator.clipboard.writeText(message);
     toast.success("Invite message copied");
   };
@@ -357,7 +355,7 @@ export default function AdminGuestsPage() {
           <>
           <div className="space-y-3 md:hidden">
             {guests.map((guest) => {
-              const { link, message } = buildInviteMessage(guest, baseUrl);
+              const { link, message } = buildInviteMessage(guest);
               const whatsappUrl = buildWhatsAppUrl(guest.phone, message);
               return (
                 <article key={guest.id} className="rounded-xl border border-brand-gold/20 bg-brand-black/25 p-3">
@@ -410,7 +408,7 @@ export default function AdminGuestsPage() {
             </thead>
             <tbody>
               {guests.map((guest) => {
-                const { link, message } = buildInviteMessage(guest, baseUrl);
+                const { link, message } = buildInviteMessage(guest);
                 const whatsappUrl = buildWhatsAppUrl(guest.phone, message);
 
                 return (

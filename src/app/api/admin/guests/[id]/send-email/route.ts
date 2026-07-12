@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 import { sendInvitationEmail } from "@/lib/email";
-import { getBaseUrl } from "@/lib/utils";
+import { buildInviteUrl } from "@/lib/site";
 
 export async function POST(
   _: Request,
@@ -24,7 +24,7 @@ export async function POST(
 
   const settings = await prisma.eventSetting.findFirst({ orderBy: { id: "asc" } });
 
-  const inviteLink = `${getBaseUrl()}/invite/${guest.inviteToken}`;
+  const inviteLink = buildInviteUrl(guest.inviteToken);
 
   try {
     await sendInvitationEmail({

@@ -3,11 +3,10 @@ import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import { ToastProvider } from "@/components/toast-provider";
+import { getSiteUrl } from "@/lib/site";
 
-const configuredBaseUrl = process.env.INVITATION_PUBLIC_URL?.trim();
-const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
-const siteUrl = configuredBaseUrl
-  ?? (productionUrl ? (productionUrl.startsWith("http") ? productionUrl : `https://${productionUrl}`) : "https://robokorda-invitation.vercel.app");
+const siteUrl = getSiteUrl();
+const previewImageUrl = `${siteUrl}/robokorda-logo.png`;
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -28,22 +27,22 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon.png", type: "image/png" },
+      { url: "/robokorda-logo.png", type: "image/png" },
     ],
-    apple: [{ url: "/apple-icon.png", type: "image/png" }],
-    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/robokorda-logo.png", type: "image/png" }],
+    shortcut: ["/robokorda-logo.png"],
   },
   openGraph: {
     title: "Robokorda 10th Anniversary Invitations",
     description: "Private invitation and RSVP platform for Robokorda's 10th Anniversary at Manna Safari Lodge.",
     siteName: "Robokorda Africa",
     type: "website",
+    url: siteUrl,
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 226,
-        height: 223,
+        url: previewImageUrl,
+        width: 512,
+        height: 512,
         alt: "Robokorda Africa logo",
       },
     ],
@@ -52,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Robokorda 10th Anniversary Invitations",
     description: "Private invitation and RSVP platform for Robokorda's 10th Anniversary at Manna Safari Lodge.",
-    images: ["/twitter-image.png"],
+    images: [previewImageUrl],
   },
 };
 
