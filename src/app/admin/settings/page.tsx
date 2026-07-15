@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { AdminShell } from "@/components/admin/admin-shell";
 
 type Settings = {
@@ -34,29 +36,30 @@ export default function AdminSettingsPage() {
   const [form, setForm] = useState<Settings>(defaults);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const response = await fetch("/api/admin/settings");
-        const raw = await response.text();
-        const body = raw ? JSON.parse(raw) : {};
+  const load = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/admin/settings");
+      const raw = await response.text();
+      const body = raw ? JSON.parse(raw) : {};
 
-        if (response.ok && body.settings) {
-          setForm({
-            ...defaults,
-            ...body.settings,
-            eventDate: body.settings.eventDate?.split("T")[0] ?? defaults.eventDate,
-          });
-        } else if (!response.ok) {
-          toast.error(body.error || "Failed to load settings");
-        }
-      } catch {
-        toast.error("Failed to load settings");
-      } finally {
-        setLoading(false);
+      if (response.ok && body.settings) {
+        setForm({
+          ...defaults,
+          ...body.settings,
+          eventDate: body.settings.eventDate?.split("T")[0] ?? defaults.eventDate,
+        });
+      } else if (!response.ok) {
+        toast.error(body.error || "Failed to load settings");
       }
-    };
+    } catch {
+      toast.error("Failed to load settings");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     void load();
   }, []);
 
@@ -86,9 +89,21 @@ export default function AdminSettingsPage() {
 
   return (
     <AdminShell>
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold">Event Settings</h1>
-        <p className="text-sm opacity-80">Update core event information and branding assets.</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-semibold">Event Settings</h1>
+          <p className="text-sm opacity-80">Update core event information and branding assets.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void load()}
+          disabled={loading}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-brand-gold/30 bg-brand-black/30 text-sm transition hover:bg-brand-gold/10 disabled:cursor-not-allowed disabled:opacity-50"
+          title="Refresh settings"
+          aria-label="Refresh settings"
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
+        </button>
       </div>
 
       {loading ? (

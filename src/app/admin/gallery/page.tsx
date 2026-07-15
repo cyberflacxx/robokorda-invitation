@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faImage, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { AdminShell } from "@/components/admin/admin-shell";
 
 type ImageItem = {
@@ -40,10 +40,6 @@ export default function AdminGalleryPage() {
 
   useEffect(() => {
     void load();
-    const timer = setInterval(() => {
-      void load();
-    }, 12000);
-    return () => clearInterval(timer);
   }, []);
 
   const createImage = async (event: React.FormEvent) => {
@@ -83,9 +79,21 @@ export default function AdminGalleryPage() {
 
   return (
     <AdminShell>
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold">Gallery Management</h1>
-        <p className="text-sm opacity-80">Upload hero and gallery images for the guest experience.</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-semibold">Gallery Management</h1>
+          <p className="text-sm opacity-80">Upload hero and gallery images for the guest experience.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void load()}
+          disabled={loading}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-brand-gold/30 bg-brand-black/30 text-sm transition hover:bg-brand-gold/10 disabled:cursor-not-allowed disabled:opacity-50"
+          title="Refresh gallery"
+          aria-label="Refresh gallery"
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
+        </button>
       </div>
 
       <form onSubmit={createImage} className="card mb-6 grid gap-3 md:grid-cols-4">

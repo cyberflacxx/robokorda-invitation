@@ -3,6 +3,8 @@
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { AdminShell } from "@/components/admin/admin-shell";
 import type { RSVPStatusType } from "@/lib/enums";
 
@@ -51,10 +53,6 @@ export default function AdminCheckinPage() {
 
   useEffect(() => {
     void load();
-    const timer = setInterval(() => {
-      void load();
-    }, 10000);
-    return () => clearInterval(timer);
   }, []);
 
   const prepareQr = async (guest: Guest) => {
@@ -108,9 +106,21 @@ export default function AdminCheckinPage() {
 
   return (
     <AdminShell>
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold">Check-In System</h1>
-        <p className="text-sm opacity-80">Verify RSVP codes and prevent duplicate check-ins.</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-semibold">Check-In System</h1>
+          <p className="text-sm opacity-80">Verify RSVP codes and prevent duplicate check-ins.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void load()}
+          disabled={loading}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-brand-gold/30 bg-brand-black/30 text-sm transition hover:bg-brand-gold/10 disabled:cursor-not-allowed disabled:opacity-50"
+          title="Refresh check-in list"
+          aria-label="Refresh check-in list"
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
+        </button>
       </div>
 
       <div className="mb-6 grid gap-4 lg:grid-cols-3">
