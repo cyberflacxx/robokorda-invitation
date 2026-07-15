@@ -40,6 +40,13 @@ const STATUS_COLORS: Record<RSVPStatusType, string> = {
   MAYBE:   "bg-blue-500/20 text-blue-300 border-blue-400/30",
 };
 
+const STATUS_LABELS: Record<RSVPStatusType, string> = {
+  PENDING: "Pending",
+  ACCEPT: "Accepted",
+  DECLINE: "Declined",
+  MAYBE: "Maybe",
+};
+
 const defaultForm = {
   fullName: "",
   gender: "PREFER_NOT_TO_SAY" as GenderType,
@@ -335,7 +342,7 @@ export default function AdminGuestsPage() {
         >
           <option value="ALL">All statuses</option>
           <option value="PENDING">Pending</option>
-          <option value="ACCEPT">Accept</option>
+          <option value="ACCEPT">Accepted</option>
           <option value="DECLINE">Decline</option>
           <option value="MAYBE">Maybe</option>
         </select>
@@ -371,7 +378,7 @@ export default function AdminGuestsPage() {
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <p className="font-semibold text-sm">{guest.fullName}</p>
                     <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[guest.rsvpStatus]}`}>
-                      {guest.rsvpStatus}
+                      {STATUS_LABELS[guest.rsvpStatus]}
                     </span>
                   </div>
                   <p className="text-xs text-brand-paper/70">{guest.email || guest.phone || "—"}</p>
@@ -427,7 +434,7 @@ export default function AdminGuestsPage() {
                     <td className="py-3 pr-4 text-brand-paper/70">{guest.gender ?? "—"}</td>
                     <td className="py-3 pr-4">
                       <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[guest.rsvpStatus]}`}>
-                        {guest.rsvpStatus}
+                        {STATUS_LABELS[guest.rsvpStatus]}
                       </span>
                     </td>
                     <td className="py-3 pr-4 font-mono text-xs text-brand-gold/80">{guest.rsvpCode}</td>

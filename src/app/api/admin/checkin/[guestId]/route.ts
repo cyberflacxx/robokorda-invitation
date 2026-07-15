@@ -66,3 +66,47 @@ export async function POST(
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ guestId: string }> },
+) {
+  const auth = await requireAdmin();
+  if (auth.response || !auth.session) {
+    return auth.response ?? NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { guestId } = await params;
+  const id = Number(guestId);
+
+  if (Number.isNaN(id)) {
+    return NextResponse.json({ error: "Invalid guest id" }, { status: 400 });
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const guest = await tx.guest.findUnique({ where: { id } });
+      if (!guest) {
+        throw new Error("Guest not found");
+      }
+
+      if (!guest.isCheckedIn) {
+        throw new Error("Guest is not checked in");
+      }
+
+      await tx.checkIn.delete({
+        where: { guestId: guest.id },
+      });
+
+      await tx.guest.update({
+        where: { id: guest.id },
+        data: { isCheckedIn: false },
+      });
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Undo check-in failed";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
+}

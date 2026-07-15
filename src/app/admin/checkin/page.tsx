@@ -14,6 +14,13 @@ type Guest = {
   isCheckedIn?: boolean;
 };
 
+const STATUS_LABELS: Record<RSVPStatusType, string> = {
+  PENDING: "Pending",
+  ACCEPT: "Accepted",
+  DECLINE: "Declined",
+  MAYBE: "Maybe",
+};
+
 export default function AdminCheckinPage() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,6 +88,22 @@ export default function AdminCheckinPage() {
     void load();
   };
 
+  const undoCheckin = async (guest: Guest) => {
+    const response = await fetch(`/api/admin/checkin/${guest.id}`, {
+      method: "DELETE",
+    });
+    const raw = await response.text();
+    const body = raw ? JSON.parse(raw) : {};
+
+    if (!response.ok) {
+      toast.error(body.error || "Undo check-in failed");
+      return;
+    }
+
+    toast.success(`${guest.fullName} check-in removed`);
+    void load();
+  };
+
   const lookupByCode = guests.find((guest) => guest.rsvpCode.toLowerCase() === codeInput.toLowerCase());
 
   return (
@@ -137,10 +160,10 @@ export default function AdminCheckinPage() {
                 <tr key={guest.id} className="border-b border-brand-gold/10">
                   <td className="py-3 pr-3">{guest.fullName}</td>
                   <td className="py-3 pr-3">{guest.rsvpCode}</td>
-                  <td className="py-3 pr-3">{guest.rsvpStatus}</td>
+                  <td className="py-3 pr-3">{STATUS_LABELS[guest.rsvpStatus]}</td>
                   <td className="py-3 pr-3">{guest.isCheckedIn ? "Checked-In" : "Pending"}</td>
                   <td className="py-3 pr-3">
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-col items-start gap-2">
                       <button onClick={() => void prepareQr(guest)} className="rounded border border-brand-gold/30 px-2 py-1">QR</button>
                       <button
                         onClick={() => void markCheckin(guest)}
@@ -148,6 +171,13 @@ export default function AdminCheckinPage() {
                         className="rounded border border-green-400/70 bg-green-500/15 px-2 py-1 text-green-200 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Check-In
+                      </button>
+                      <button
+                        onClick={() => void undoCheckin(guest)}
+                        disabled={!guest.isCheckedIn}
+                        className="rounded border border-amber-400/70 bg-amber-500/15 px-2 py-1 text-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Undo
                       </button>
                     </div>
                   </td>
