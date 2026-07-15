@@ -83,7 +83,7 @@ const scheduleItems = [
 const dressGuides = {
   ladies: {
     title: "Ladies",
-    intro: "Elegant evening wear, long dress with heals, in jewel tones or classic neutrals.Any colour is allowed.",
+    intro: "Elegant evening wear, long dress with heels, in jewel tones or classic neutrals.Any colour is allowed.",
     tip: "Floor-length gown, chic midi dress, or tailored jumpsuit with elegant heels.",
     samples: curatedImages.dress.ladies,
     helpName: "Event Styling Desk (Ladies)",
