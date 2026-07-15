@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowsRotate,
   faCopy,
   faEnvelope,
   faMagnifyingGlass,
@@ -108,8 +109,6 @@ export default function AdminGuestsPage() {
   useEffect(() => {
     setForm(defaultForm);
     void loadGuests();
-    const timer = setInterval(() => void loadGuests(), 12000);
-    return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -342,6 +341,16 @@ export default function AdminGuestsPage() {
         </select>
         <button type="button" onClick={() => void loadGuests()} className="rounded-lg border border-brand-gold/30 bg-brand-black/30 px-4 py-2 text-sm transition hover:bg-brand-gold/10">
           Apply
+        </button>
+        <button
+          type="button"
+          onClick={() => void loadGuests()}
+          disabled={loading}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-brand-gold/30 bg-brand-black/30 text-sm transition hover:bg-brand-gold/10 disabled:cursor-not-allowed disabled:opacity-50"
+          title="Refresh guests"
+          aria-label="Refresh guests"
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
 
