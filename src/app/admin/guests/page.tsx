@@ -1,6 +1,8 @@
 "use client";
 
 import Papa from "papaparse";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +16,8 @@ import {
   faUpload,
   faPen,
   faPaperPlane,
+  faFileCsv,
+  faFilePdf,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { AdminShell } from "@/components/admin/admin-shell";
@@ -74,6 +78,30 @@ function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
   const normalized = normalizeWhatsAppNumber(phone);
   if (!normalized) return null;
   return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+}
+
+function getExportRows(guests: Guest[]) {
+  return guests.map((guest) => ({
+    Name: guest.fullName,
+    "Cell Number": guest.phone ?? "",
+    Status: STATUS_LABELS[guest.rsvpStatus],
+  }));
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function buildExportFilename(extension: "csv" | "pdf") {
+  const date = new Date().toISOString().slice(0, 10);
+  return `guest-status-${date}.${extension}`;
 }
 
 async function safeJson<T>(response: Response): Promise<T | null> {
@@ -219,6 +247,41 @@ export default function AdminGuestsPage() {
     toast.success("Invite message copied");
   };
 
+  const exportCsv = () => {
+    if (guests.length === 0) {
+      toast.error("There are no guests to export");
+      return;
+    }
+
+    const csv = Papa.unparse(getExportRows(guests), {
+      columns: ["Name", "Cell Number", "Status"],
+    });
+    downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), buildExportFilename("csv"));
+    toast.success("CSV downloaded");
+  };
+
+  const exportPdf = () => {
+    if (guests.length === 0) {
+      toast.error("There are no guests to export");
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Guest Status Report", 14, 18);
+    doc.setFontSize(10);
+    doc.text(`Generated ${new Date().toLocaleString()}`, 14, 25);
+    autoTable(doc, {
+      head: [["Name", "Cell Number", "Status"]],
+      body: getExportRows(guests).map((row) => [row.Name, row["Cell Number"], row.Status]),
+      startY: 32,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [177, 140, 80] },
+    });
+    doc.save(buildExportFilename("pdf"));
+    toast.success("PDF downloaded");
+  };
+
   return (
     <AdminShell>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -228,16 +291,26 @@ export default function AdminGuestsPage() {
             Create guests, set their gender here, and send their personalised invitation.
           </p>
         </div>
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-brand-gold/30 bg-brand-black/30 px-3 py-2 text-sm transition hover:bg-brand-gold/10">
-          <FontAwesomeIcon icon={faUpload} />
-          Import CSV
-          <input
-            type="file"
-            accept=".csv"
-            className="hidden"
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) void importCsv(f); }}
-          />
-        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={exportPdf} className="inline-flex items-center gap-2 rounded-lg border border-brand-gold/30 bg-brand-black/30 px-3 py-2 text-sm transition hover:bg-brand-gold/10">
+            <FontAwesomeIcon icon={faFilePdf} />
+            PDF
+          </button>
+          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-brand-gold/30 bg-brand-black/30 px-3 py-2 text-sm transition hover:bg-brand-gold/10">
+            <FontAwesomeIcon icon={faFileCsv} />
+            CSV
+          </button>
+          <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-brand-gold/30 bg-brand-black/30 px-3 py-2 text-sm transition hover:bg-brand-gold/10">
+            <FontAwesomeIcon icon={faUpload} />
+            Import CSV
+            <input
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) void importCsv(f); }}
+            />
+          </label>
+        </div>
       </div>
 
       {/* Create / Edit forms */}
